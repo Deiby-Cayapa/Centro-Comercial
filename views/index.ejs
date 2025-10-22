@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="menu.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="shortcut icon" href="img/por_defecto/icono.png" type="image/x-icon">
+
+  <title>Centro Comercial - Yantzaza</title>
+
+  <meta name="description" content="Descripción clara y atractiva que incluya palabras clave. Máximo 160 caracteres.">
+  <meta name="keywords" content="palabra clave 1, palabra clave 2, palabra clave 3">
+  <meta name="author" content="Tu nombre o empresa">
+
+  <!-- SEO para redes sociales (Open Graph) -->
+  <meta property="og:title" content="Centro comercial/Mercado Yantzaza">
+  <meta property="og:description" content="Ven y visita nuestros locales y las variedades que ofrecen estos">
+  <meta property="og:image" content="img/por_defecto/icono.png">
+  <meta property="og:url" content="https://tusitio.com"> <!-- remplazar por dominio web -->
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Centro comercial/Mercado Yantzaza">
+  <meta name="twitter:description" content="Ven y visita nuestros locales y las variedades que ofrecen estos">
+  <meta name="twitter:image" content="img/por_defecto/icono.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="img/por_defecto/icono.png" type="image/x-icon">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://tusitio.com">
+
+</head>
+
+<body>
+<style>
+  .xd li > div>a{
+    padding: 5px 0;
+ }z
+</style>
+<%- include("./template/header.ejs")%>
+<div style="display: flex;justify-content: flex-start;align-items: flex-start;">
+  <div style="position: absolute;z-index: 2;text-align: start;border-radius: 15px;">
+    <h1 class="animate__animated animate__fadeInLeft" style="z-index: 0;color: rgb(255, 255, 255);font-size: calc(3.5rem + 2.7vw);padding:70px 0 0 20px;text-shadow:0 0 5px #000, 20px 13px 10px rgb(0, 81, 135);font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">CENTRO COMERCIAL <br>CIUDAD YANTZAZA</h1>
+  </div>
+  <div class="slider">
+    <ul>
+      <li><img src="/img/por_defecto/slider1.jpg"></li>
+      <li><img src="/img/por_defecto/slider2.jpg"></li>
+      <li><img src="/img/por_defecto/slider3.jpg"></li>
+      <li><img src="/img/por_defecto/slider4.jpg"></li>
+    </ul>
+  </div>
+</div>
+
+<%- include("./template/footer.ejs")%>
+</body>
+</html>

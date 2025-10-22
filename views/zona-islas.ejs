@@ -1,0 +1,100 @@
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="img/por_defecto/icono.png" type="image/x-icon">
+  <title>Islas - Centro Comercial</title>
+<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/menu.css">
+</head>
+
+<body>
+    <style>
+        li{
+            color: rgba(0, 0, 89, 0.792);
+            font-size: 17px;
+        }
+    </style>
+    <%- include("./template/header.ejs")%>
+
+        <main>
+            <section class="py-5 text-center container">
+                <div class="row py-lg-5">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <br>
+                        <h1>CENTRO COMERCIAL - YANTZAZA</h1>
+                        <p>Explora los productos disponibles en Islas.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="contenedor">
+                <h2 class="text-center">Islas</h2>
+                <br>
+                <div style="width: 100%;" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <% locales.forEach(local=> { %>
+                        <div class="col">
+                            <div class="card">
+                                <p style="text-align: center; text-transform: uppercase; font-size: 20px; margin: 5px 0;color:red;font-family: 'Poppins', sans-serif;"> <%= local.nombre_local %>
+                                </p>
+                                <img style="border-radius: 0;" src="/img/<%= local.imagen %>" 
+                                onerror="this.onerror=null; this.src='/img/por_defecto/externos_por_defecto.webp';"
+                                class="bd-placeholder-img card-img-top" 
+                                style="object-fit: cover;" width="100%" height="225" 
+                                alt="Imagen">
+                                <hr>
+                                <div class="card-body">
+                                    <i class="card-text">
+                                        <%= local.descripcion %>
+                                    </i>
+                                    <ul>
+                                        
+                                        <li> - Propietario: <%= local.propietario %>
+                                        </li>
+                                        <li> - Local N°: <%= local.n_local %></li>
+                                        <li> - Tipo de Negocio: <%= local.categoria %>
+                                        </li>
+                                        <li> - <%= local.horario %>
+                                        </li>
+                                        <li> - Telefono: <%= local.contacto %>
+                                        </li>
+                                    </ul>
+                                    <hr>
+                                    <% if (local.contacto) { 
+                                        let numeroLimpio = local.contacto.startsWith("09") ? local.contacto.substring(1) : local.contacto;
+                                        let numeroConCodigo = `+593${numeroLimpio}`; // 593 es el código de país de Ecuador, cámbialo según sea necesario.
+                                   %>
+                                   <div class="redes_sociales">
+
+                                       <a style="color: rgb(3, 180, 3);" href="https://wa.me/<%= numeroConCodigo %>" target="_blank" rel="noopener noreferrer">
+                                           <i class="bi bi-whatsapp"></i>
+                                           <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+                                               <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+                                            </svg>
+                                        </a>
+                                        <% } %>
+                                        <% if (local.facebook != null && local.facebook != '') { %>
+                                            <a style="color: blue;" href="<%= local.facebook %>" target="_blank" rel="noopener noreferrer">
+                                                <i class="bi bi-facebook"></i><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+                                                    <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
+                                                </svg>
+                                            </a>
+                                        <% } %>
+                                        <% if (local.tiktok != null && local.tiktok !='') { %>
+                                            <a style="color: rgb(0, 0, 0);" href="<%= local.tiktok %>" target="_blank" rel="noopener noreferrer">
+                                                <i class="bi bi-tiktok"></i><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" xmlns:xlink="http://www.w3.org/1999/xlink" aria-label="TikTok" role="img" viewBox="0 0 512 512" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect rx="15%" height="512" width="512" fill="#ffffff"></rect><defs><path id="t" d="M219 200a117 117 0 1 0 101 115v-128a150 150 0 0 0 88 28v-63a88 88 0 0 1-88-88h-64v252a54 54 0 1 1-37-51z" style="mix-blend-mode:multiply"></path></defs><use href="#t" fill="#f05" x="18" y="15"></use><use href="#t" fill="#0ee"></use></g></svg>
+                                            </a>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+            </div>
+        </main>
+        <%- include("./template/footer.ejs")%>
+    </body>
+</html>

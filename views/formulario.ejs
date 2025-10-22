@@ -1,0 +1,213 @@
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="/js/verificarSesion.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <div class="cont">
+        <form class="form-agregar" id="formulario_Crear" action="/agregar-local" method="post">
+            <!-- <div class="fondo"></div> -->
+            <h1>Crear Nuevo</h1>
+            <div class="linea"></div>
+            <div class="input-form">
+                <label>* Propietario: </label>
+                <input type="text" id="crear_propietario" name="propietario" required>
+            </div>
+            <div class="input-form">
+                <label>* Cedula: </label>
+                <input type="text" id="crear_cedula" name="cedula" required>
+            </div>
+            <div class="input-form">
+                <label>* Nombre del Local: </label>
+                <input type="text" id="crear_nombre" name="nombre_local" required>
+            </div>
+            <div class="input-form">
+                <label>* Telefono: </label>
+                <input type="text" id="crear_telefono" name="telefono" required>
+            </div>
+            <div class="input-form">
+                <label> Email: </label>
+                <input type="email" id="crear_email" name="email">
+            </div>
+            <div class="input-form">
+                <label>Facebook:</label>
+                <input type="text" id="crear_facebook" name="facebook">
+            </div>
+            <div class="input-form">
+                <label>Tik Tok:</label>
+                <input type="text" id="crear_tiktok" name="tiktok">
+            </div>
+            <div class="input-form">
+                <label>* Descripcion: </label>
+                <textarea class="textarea" id="descripcion" name="descripcion" rows="3" cols="50" required></textarea>
+            </div>
+            <div id="local_externo" class="input-form" style="display: none;">
+                <label>Tipo de Local:</label>
+                <input type="text" name="local_externo" id="local_externo_input">
+            </div>
+
+            <div class="input-form2">
+                <div>
+                    <label>Categoría:</label>
+                    <select id="crear_categoria" name="categoria">
+                        <option value="" disabled selected>Elegir categoría</option>
+                        <option value="locales_abarrotes">Abarrotes</option>
+                        <option value="locales_batidos">Batidos</option>
+                        <option value="locales_cafeteria">Cafeterias</option>
+                        <option value="locales_carnes">Carnes, Frigorificos</option>
+                        <option value="locales_comedores">Comedor</option>
+                        <option value="locales_externos">Locales Externos</option>
+                        <option value="locales_frutas">Frutas</option>
+                        <option value="locales_islas">Isla</option>
+                        <option value="locales_montes">Montes de Horchatas</option>
+                        <option value="locales_productos_zona">Productos de la Zona</option>
+                        <option value="locales_ropa">Ropa</option>
+                        <option value="locales_verduras">Verduras</option>
+                    </select>
+                </div>
+                <div>
+                    <label>* Horario: </label>
+                    <input type="text" id="crear_horario" name="horario" placeholder="Ej: 9:00 AM - 6:00 PM" required>
+                </div>
+                <div>
+                    <label>* Nº Local: </label>
+                    <input type="number" id="crear_nLocal" placeholder="" name="n_local" required>
+                </div>
+            </div>
+            <button type="button" id="btnSeleccionarImagen" style="padding: 3px 20px; font-size: calc(.4rem + .4em);">📷Seleccionar Imagen</button>
+            <input type="hidden" id="imagenSeleccionada" name="url_imagen" required>
+            <div id="previewImagen" style="margin-top: 10px;"></div>
+
+            <% if (typeof mensaje !== "undefined") { %>
+                <script>
+                    Swal.fire({
+                        title: "<%= mensajeTipo === 'error' ? 'Error' : 'Éxito' %>",
+                        text: "<%= mensaje %>",
+                        icon: "<%= mensajeTipo === 'error' ? 'error' : 'success' %>",
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+            <% } %>
+                    <div class="linea"></div>
+                    <input class="submit" id="formulario_crear" type="submit" value="Agregar Negocio">
+        </form>
+        
+    </div>
+    <%- include("./template/config.ejs")%>
+    <script>
+        if (window.history.replaceState) {
+        window.history.replaceState(null, null, "formulario");
+    }
+    
+    document.getElementById("formulario_Crear").addEventListener("submit", function(event) {
+    let propietario = document.getElementById("crear_propietario").value.trim();
+    let cedula = document.getElementById("crear_cedula").value.trim();
+    let nombreLocal = document.getElementById("crear_nombre").value.trim();
+    let telefono = document.getElementById("crear_telefono").value.trim();
+    let email = document.getElementById("crear_email").value.trim();
+    let descripcion = document.getElementById("descripcion").value.trim();
+    let nLocal = document.getElementById("crear_nLocal").value.trim();
+    let categoria = document.getElementById("crear_categoria").value;
+    let horario = document.getElementById("crear_horario").value.trim();
+
+    let errores = [];
+
+    // Validar que el propietario solo contenga letras y espacios
+    if (!/^[A-Za-z\s]+$/.test(propietario)) {
+        errores.push("El propietario solo debe contener letras y espacios.");
+    }
+
+    if (!/^\d{10}$/.test(cedula)) {
+        errores.push("La cédula debe contener solo 10 dígitos numéricos.");
+    }
+
+    // Validar número de local (Solo números positivos)
+    if (!/^\d+$/.test(nLocal) || parseInt(nLocal) <= 0) {
+        errores.push("El número de local debe ser un número positivo.");
+    }
+
+    if (!/^\d{10}$/.test(telefono)) {
+        errores.push("El teléfono debe contener 10 dígitos numéricos.");
+    }
+
+    // Validar email con formato adecuado
+    if (email !== "" && !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        errores.push("Ingrese un correo electrónico válido.");
+    }
+
+    // Validar que la categoría haya sido seleccionada
+    if (!categoria) {
+        errores.push("Debe seleccionar una categoría.");
+    }
+
+    // Validar horario con formato HH:MM AM/PM - HH:MM AM/PM
+    if (!/^\d{1,2}:\d{2}\s?(AM|PM)\s?-\s?\d{1,2}:\d{2}\s?(AM|PM)$/.test(horario)) {
+        errores.push("El horario debe tener el formato '9:00 AM - 6:00 PM'.");
+    }
+
+    if (errores.length > 0) {
+        event.preventDefault(); // Evita que el formulario se envíe
+        alert(errores.join("\n"));
+    }
+});
+document.getElementById("btnSeleccionarImagen").addEventListener("click", function() {
+    Swal.fire({
+        title: "Selecciona una Imagen",
+        html: `
+            <div id="galeria" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                <!-- Las imágenes se insertarán aquí dinámicamente -->
+            </div>
+        `,
+        showCancelButton: true,
+        cancelButtonText: "Cancelar",
+        showConfirmButton: false, // No necesitamos botón de confirmación
+        didOpen: () => {
+            // Cargar imágenes desde el servidor
+            fetch("/listar-imagenes") // Ruta del backend que devuelve JSON con imágenes
+                .then(response => response.json())
+                .then(data => {
+                    const galeria = document.getElementById("galeria");
+                    galeria.innerHTML = ""; // Limpiar antes de insertar
+                    data.imagenes.forEach(img => {
+                        const imgElement = document.createElement("img");
+                        imgElement.src = `/img/${img}`;
+                        imgElement.style = "width: 100px; height: 100px; cursor: pointer; border-radius: 5px;";
+                        imgElement.addEventListener("click", () => {
+                            document.getElementById("imagenSeleccionada").value = img;
+                            document.getElementById("previewImagen").innerHTML = `<img src="/img/${img}" style="max-width: 150px;">`;
+                            Swal.close(); // Cerrar el modal
+                        });
+                        galeria.appendChild(imgElement);
+                    });
+                })
+                .catch(error => console.error("Error al cargar imágenes:", error));
+        }
+    });
+});
+        document.getElementById("crear_categoria").addEventListener("change", function () {
+            const divOtro = document.getElementById("local_externo");
+            const inputOtro = document.getElementById("local_externo_input");
+
+            if (this.value === "locales_externos" || this.value === "locales_islas") {
+                divOtro.style.display = "flex"; // Mostrar el div
+                inputOtro.required = true; // Hacer el input obligatorio
+            } else {
+                divOtro.style.display = "none"; // Ocultar el div
+                inputOtro.required = false; // Quitar la obligatoriedad
+                inputOtro.value = ""; // Limpiar el campo
+            }
+        });
+        
+    </script>
+
+<%- include("./template/footer.ejs")%>
+    
+</body>
+
+</html>

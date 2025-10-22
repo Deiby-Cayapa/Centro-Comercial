@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/por_defecto/icono.png" type="image/x-icon">
+    <title>Login Administrador</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div style="margin: 0; padding:0;" class="cont">
+        <div class="lt_administracion">
+            <div class="ltr_administracion">
+                <h1>PANEL DE ADMINISTRACION</h1>
+                <h2>Centro Comercial Ciudad Yantzaza</h2>
+            </div>
+            <form class="login-form" id="iniciar_sesion">
+                <h2>Iniciar Sesion</h2>
+                <h1>ADMINISTRADOR</h1>
+                <div class="input-group">
+                    <input id="usuario" type="text" placeholder="Usuario">
+                </div>
+                <div class="input-group">
+                    <input id="password" type="password" placeholder="Contraseña">
+                    <div id="eye">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                          </svg>
+                          <i class="bi bi-eye-fill"></i>
+                    </div>
+                </div>
+                <button type="submit" class="submit">Iniciar sesión</button><br>
+            </form>
+        </div>
+    </div>
+    <script>
+
+let passwordInput = document.getElementById("password");
+    document.getElementById("eye").addEventListener("click", function () {
+        passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+    });
+
+  document.getElementById("iniciar_sesion").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const usuario = document.getElementById("usuario").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (usuario === "" || password === "") {
+        Swal.fire("Error", "Por favor, completa todos los campos.", "error");
+        return;
+    }
+
+    fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ usuario, password }),
+    })
+    
+    
+    .then(response => response.json())
+    .then(data => { 
+        if (data.success) {
+            const now = new Date();
+            const expirationTime = now.getTime() + (30 * 60 * 1000); //minutos en milisegundos
+            sessionStorage.setItem("token", data.token); // Guarda el token
+            sessionStorage.setItem("usuario", usuario);
+            sessionStorage.setItem("expiration", expirationTime);
+            Swal.fire("Éxito", data.message, "success").then(() => {
+                // Hacer una solicitud GET a la ruta protegida
+                fetch("/formulario", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${sessionStorage.getItem("token")}` // Enviar el token en el encabezado
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = "/formulario"; // Redirige al formulario
+                    } else {
+                        return response.json().then(data => {
+                            Swal.fire("Error", data.message, "error");
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire("Error", "Hubo un problema con la solicitud.", "error");
+                });
+            });
+        } else {
+            Swal.fire("Error", data.message, "error");
+        }
+    })
+    .catch(error => {
+        Swal.fire("Error", "Hubo un problema con el servidor.", "error");
+    });
+});
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

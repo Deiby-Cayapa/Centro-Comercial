@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+  <link rel="shortcut icon" href="img/por_defecto/icono.png" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Imágenes</title>
+    <script src="/js/verificarSesion.js"></script>
+</head>
+
+<body>
+    <style>
+        .galeria {
+            width: 90%;
+            margin: 25px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(274px, 100%), 1fr));
+            gap: 20px;
+        }
+        .galeria img{
+            object-fit: cover;
+            width: 100%;
+            height: 300px;
+            border-radius: 3px 3px 0 0;
+        }
+        .subir{
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+        #subir_img{
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #37ff37;
+            box-shadow: 4px 3px 2px #00000053;
+            border: 2px rgb(8, 150, 8) dashed;
+            font-size: 15px;
+            transition: .5s;
+            margin: 10px;
+        }
+        #subir_img:hover{
+            background-color: #6cff6c;
+            border: solid 2px green;
+            box-shadow: 4px 3px 2px #00000092;
+        }
+        .cont_f{
+            width: 100%;
+            display: none;
+            justify-content: center;
+        }
+        .formulario_img{
+            width: fit-content;
+            border-radius: 5px;
+            /* border: dashed 3px #0000005a; */
+            box-shadow: 0 0 5px #000000d3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding:20px 10px;
+        }
+        .btnSubir{
+            cursor: pointer;
+            padding:3px 10px;
+            margin: 10px;
+            color: rgba(0, 0, 0, 0.785); 
+            border-radius: 3px;
+            border: none;
+            font-size: 14px; 
+            display: flex;
+            box-shadow:0 3px 10px  rgba(0, 0, 255, 0.599);
+            transition: .5s;
+        }
+        .btnSubir:hover{
+            background-color: #6cbaff;
+            color: #000;
+        }
+        .delete-btn{
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            background: rgb(255, 0, 0);
+            color: #fff;
+            padding: 5px 0;
+            font-size: 15px;
+            border-radius:0 0 3px 3px;
+        }
+        .navegacion{
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+            gap: 20px;
+        }
+        .navegacion button{
+            border: none;
+            font-size: 22px;
+            color: #0421ff;
+            cursor: pointer;
+            padding: 0 7px;
+            background-color: transparent;
+        }
+        .navegacion button:disabled{
+            color: #adb3e8;
+            cursor: default;
+        }
+</style>
+    <h1 style="padding: 15px;">Galería de Imágenes</h1>
+    
+    <!-- Subir nueva imagen -->
+    <div class="subir">
+        <button id="subir_img">✚ Subir Imagen</button>
+        <div id="cargar" class="cont_f">
+            <form id="formSubida" class="formulario_img" action="/subir-imagen" method="POST" enctype="multipart/form-data">
+                <div class="close" style="width: 90%; display: flex; justify-content: flex-end; cursor: pointer;">╳</div>
+                <h3 style="margin-bottom: 10px;">Cargar Nueva Imagen</h3>
+                <input id="inputImagen" type="file" name="imagen" accept=".jpg,.jpeg,.png,.gif,.webp" required>
+                <button class="btnSubir" type="submit"><span style="padding: 0 8px;">SUBIR</span><svg viewBox="0 0 24 24" width="15" height="15" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.5535 2.49392C12.4114 2.33852 12.2106 2.25 12 2.25C11.7894 2.25 11.5886 2.33852 11.4465 2.49392L7.44648 6.86892C7.16698 7.17462 7.18822 7.64902 7.49392 7.92852C7.79963 8.20802 8.27402 8.18678 8.55352 7.88108L11.25 4.9318V16C11.25 16.4142 11.5858 16.75 12 16.75C12.4142 16.75 12.75 16.4142 12.75 16V4.9318L15.4465 7.88108C15.726 8.18678 16.2004 8.20802 16.5061 7.92852C16.8118 7.64902 16.833 7.17462 16.5535 6.86892L12.5535 2.49392Z" fill="#1C274C"></path> <path d="M3.75 15C3.75 14.5858 3.41422 14.25 3 14.25C2.58579 14.25 2.25 14.5858 2.25 15V15.0549C2.24998 16.4225 2.24996 17.5248 2.36652 18.3918C2.48754 19.2919 2.74643 20.0497 3.34835 20.6516C3.95027 21.2536 4.70814 21.5125 5.60825 21.6335C6.47522 21.75 7.57754 21.75 8.94513 21.75H15.0549C16.4225 21.75 17.5248 21.75 18.3918 21.6335C19.2919 21.5125 20.0497 21.2536 20.6517 20.6516C21.2536 20.0497 21.5125 19.2919 21.6335 18.3918C21.75 17.5248 21.75 16.4225 21.75 15.0549V15C21.75 14.5858 21.4142 14.25 21 14.25C20.5858 14.25 20.25 14.5858 20.25 15C20.25 16.4354 20.2484 17.4365 20.1469 18.1919C20.0482 18.9257 19.8678 19.3142 19.591 19.591C19.3142 19.8678 18.9257 20.0482 18.1919 20.1469C17.4365 20.2484 16.4354 20.25 15 20.25H9C7.56459 20.25 6.56347 20.2484 5.80812 20.1469C5.07435 20.0482 4.68577 19.8678 4.40901 19.591C4.13225 19.3142 3.9518 18.9257 3.85315 18.1919C3.75159 17.4365 3.75 16.4354 3.75 15Z" fill="#1C274C"></path> </g></svg></button>
+        </form>
+        </div>
+    </div>
+    <br>
+    <hr>
+
+    <!-- Mostrar imágenes de la carpeta -->
+    <div class="galeria">
+        <% images.forEach(image => { %>
+            <div style="box-shadow: 0 5px 10px #0000008d;">
+                    <img loading="lazy" src="/img/<%= image %>">
+                <form action="/eliminar-imagen" method="POST">
+                    <input type="hidden" name="imagen" value="<%= image %>">
+                    <div style="width: 100%; display: flex; justify-content: center; cursor: pointer;">
+                        <button class="delete-btn" data-image="<%= image %>"><strong>Eliminar</strong></button>
+                    </div>
+                </form>
+            </div>
+        <% }); %>
+    </div>
+    <%- include("./template/config.ejs")%>
+    
+    <!-- Navegación de paginación -->
+    <div class="navegacion">
+        <button onclick="location.href='/medios?page=1'" <% if (currentPage === 1) { %> disabled <% } %>>«</button>
+        <button onclick="location.href='/medios?page=<%= currentPage - 1 %>'" <% if (currentPage === 1) { %> disabled <% } %>>‹</button>
+    
+        <span style="font-size: 17px;margin-top: 5px;color: #00548e;">Página <%= currentPage %> de <%= totalPages %></span>
+    
+        <button onclick="location.href='/medios?page=<%= currentPage + 1 %>'" <% if (currentPage === totalPages) { %> disabled <% } %>>›</button>
+        <button onclick="location.href='/medios?page=<%= totalPages %>'" <% if (currentPage === totalPages) { %> disabled <% } %>>»</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById("formSubida").addEventListener("submit", function(e) {
+        const input = document.getElementById("inputImagen");
+        const file = input.files[0];
+
+        if (!file) return;
+
+        const extensionesValidas = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+        const extension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+
+        const maxSize = 2 * 1024 * 1024; // 2MB
+
+        if (!extensionesValidas.includes(extension)) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Archivo no válido',
+                text: 'Solo se permiten imágenes: JPG, JPEG, PNG, GIF o WEBP.',
+            });
+            return;
+        }
+
+        if (file.size > maxSize) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Imagen muy grande',
+                text: 'El archivo no debe superar los 2MB.',
+            });
+            return;
+        }
+    });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector('.close').addEventListener("click", function (){
+                cerrar();
+            });
+            document.getElementById('subir_img').addEventListener("click", function () {
+                abrir();
+            });
+            document.querySelectorAll(".delete-btn").forEach(button => {
+                button.addEventListener("click", function (event) {
+                    event.preventDefault();
+
+                    const imageName = this.getAttribute("data-image");
+
+                    // Mostrar alerta de confirmación
+                    Swal.fire({
+                        title: "¿Estás seguro?",
+                        text: "Esta acción no se puede deshacer",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Sí, eliminar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Enviar petición AJAX para eliminar la imagen
+                            fetch("/eliminar-imagen", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ imagen: imageName }) // Enviar como JSON
+                            })
+                                .then(response => response.json()) // Convertir la respuesta a JSON
+                                .then(data => {
+                                    if (data.success) {
+                                        // Mostrar alerta de éxito y recargar la página
+                                        Swal.fire({
+                                            title: "¡Eliminado!",
+                                            text: "La imagen ha sido eliminada.",
+                                            icon: "success",
+                                            timer: 2000,
+                                            showConfirmButton: false
+                                        }).then(() => {
+                                            location.reload(); // 🔄 Recargar la página después de la alerta
+                                        });
+
+                                    } else {
+                                        Swal.fire("Error", data.message || "No se pudo eliminar la imagen.", "error");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error:", error);
+                                    Swal.fire("Error", "Ocurrió un problema al eliminar la imagen.", "error");
+                                });
+                        }
+                    });
+                });
+            });
+            function abrir(){
+                document.getElementById("cargar").style.display='flex';
+                document.getElementById("subir_img").style.display='none';
+            }
+            function cerrar(){
+                document.getElementById("cargar").style.display='none';
+                document.getElementById("subir_img").style.display='flex';
+            }
+        });
+    </script>
+
+<%- include("./template/footer.ejs")%>
+    
+</body>
+
+</html>

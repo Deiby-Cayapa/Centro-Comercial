@@ -1,0 +1,538 @@
+<html>
+
+<head>
+  <link rel="shortcut icon" href="img/por_defectoicono.png" type="image/x-icon">
+  <title>Tabla de Locales - Base de Datos</title>
+    <script src="/js/verificarSesion.js"></script>
+</head>
+
+<body>
+    <style>
+        body {
+            font-family: Avenir, Helvetica, Arial, sans-serif;
+            background-color: aliceblue;
+        }
+
+        .modal-open {
+            overflow: hidden;
+        }
+
+        .cont {
+            padding: 3vw 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bd_buscar,
+        .btn_buscar {
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .tabla {
+            width: 98%;
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            text-align: center;
+            align-items: center;
+            padding: 10px;
+        }
+        tr{
+            border-bottom: 1px solid #00000024;
+            transition: .5s;
+        }
+        thead {
+            background-color: #43baff16;
+        }
+
+        tbody tr:hover {
+            cursor: pointer;
+            background-color: #85858523;
+        }
+
+        .tabla {
+            width: 100%;
+        }
+        .actualizar {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #cfcecef5;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .actualizar>div {
+            background-color: #fff;
+            padding: 15px 5px;
+            box-shadow: 0 0 5px #ffffff, 0 0 10px #000;
+            border-radius: 5px;
+            max-height: 100vh;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .actualizar>div input {
+            margin-bottom: 5px;
+            width: 80%;
+        }
+
+        .contenedorTabla {
+            width: 95%;
+            border-radius: 5px;
+            background-color: #fff;
+            overflow: hidden;
+            overflow-x: auto;
+            box-shadow: 0 2px 5px #0000008d;
+            padding: 5px;
+        }
+        .swal2-html-container{
+            max-height: 70vh;
+        }
+    </style>
+    <!-- Aquí mostramos los datos en una tabla -->
+    <div class="cont">
+        <form class="buscar" action="/tabla-locales" method="get">
+            <select class="bd_buscar" name="buscar" id="">
+                <option value="" disabled selected>Elegir Tabla (Categoría)</option>
+                <option value="locales_abarrotes">Abarrotes</option>
+                <option value="locales_batidos">Batidos</option>
+                <option value="locales_cafeteria">Cafeterias</option>
+                <option value="locales_carnes">Carnes, Frigorificos</option>
+                <option value="locales_comedores">Comedor</option>
+                <option value="locales_externos">Locales Externos</option>
+                <option value="locales_frutas">Frutas</option>
+                <option value="locales_islas">Isla</option>
+                <option value="locales_montes">Montes de Horchatas</option>
+                <option value="locales_productos_zona">Productos de la Zona</option>
+                <option value="locales_ropa">Ropa</option>
+                <option value="locales_verduras">Verduras</option>
+            </select>
+            <input class="btn_buscar" type="submit" value="Buscar">
+        </form>
+        <h2 style="padding: 10px;">Tabla de Datos <span>
+                <%= nombreDescriptivo %>
+            </span></h2>
+        <div class="contenedorTabla">
+            <table class="tabla">
+                <br>
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Propietario</th>
+                        <th>Cédula</th>
+                        <th>Nombre del Local</th>
+                        <th>Contacto</th>
+                        <th>Horario</th>
+                        <% if (mostrarCategoria) { %>
+                            <th>Categoría</th>
+                            <% } %>
+                                <th>Descripción</th>
+                                <th>Facebook</th>
+                                <th>TikTok</th>
+                                <th>Imagen</th>
+                                <!-- <th>Acciones</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <% locales.forEach(local=> { %>
+                        <tr href="#editForm" id="local-<%= local.id_local %>" class="edit-btn azul" data-id="<%= local.id_local %>"
+                            data-propietario="<%= local.propietario %>"
+                            data-cedula="<%= local.cedula %>"
+                            data-nombreLocal="<%= local.nombre_local %>"
+                            data-n_Local="<%= local.n_local %>" data-contacto="<%= local.contacto %>"
+                            data-horario="<%= local.horario %>" data-categoria="<%= local.categoria %>"
+                            data-descripcion="<%= local.descripcion %>" 
+                            data-facebook="<%= local.facebook %>" data-tiktok="<%= local.tiktok %>" data-imagen="<%= local.imagen %>">
+                            <td>
+                                <%= local.n_local %>
+                            </td>
+                            <td>
+                                <%= local.propietario %>
+                            </td>
+                            <td>
+                                <%= local.cedula %>
+                            </td>
+                            <td>
+                                <%= local.nombre_local %>
+                            </td>
+                            <td>
+                                <%= local.contacto %>
+                            </td>
+                            <td>
+                                <%= local.horario %>
+                            </td>
+                            <% if (mostrarCategoria) { %>
+                                <td>
+                                    <%= local.categoria %>
+                                </td>
+                                <% } %>
+                                    <td style="max-width: 300px; min-width: 200px;">
+                                        <%= local.descripcion %>
+                                    </td>
+                                    <td>
+                                        <a href="<%= local.facebook %>" target="_blank">
+                                            <%= local.facebook %>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="<%= local.tiktok %>" target="_blank">
+                                            <%= local.tiktok %>
+                                        </a>
+                                    </td>
+                                    <td>
+                                            <%= local.imagen %>
+                                    </td>
+                                    <!-- <td href="#editForm" class="acciones">
+                                        <button class="edit-btn azul" data-id="<%= local.id_local %>"
+                                            data-propietario="<%= local.propietario %>"
+                                            data-cedula="<%= local.cedula %>"
+                                            data-nombreLocal="<%= local.nombre_local %>"
+                                            data-n_Local="<%= local.n_local %>" data-contacto="<%= local.contacto %>"
+                                            data-horario="<%= local.horario %>" data-categoria="<%= local.categoria %>"
+                                            data-descripcion="<%= local.descripcion %>"
+                                            data-facebook="<%= local.facebook %>" data-imagen="<%= local.imagen %>">
+                                            Editar
+                                        </button>
+                                        <button class="delete-btn rojo"
+                                            data-id="<%= local.id_local %>">Eliminar</button>
+                                    </td> -->
+                            </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <%- include("./template/config.ejs")%>
+
+        <form class="actualizar" id="editForm" action="/actualizar-local" method="post" enctype="multipart/form-data">
+            <div>
+                <div class="close" style="width: 90%; display: flex; justify-content: flex-end; cursor: pointer;">╳</div>
+                <input type="hidden" id="localId">
+                <label>Propietario:</label>
+                <input type="text" id="localPropietario" required maxlength="50">
+                <label>Cedula:</label>
+                <input type="text" id="localCedula" required maxlength="10">
+                <label>Nombre Local:</label>
+                <input type="text" id="localNombre" required maxlength="30">
+                <label>N° Local:</label>
+                <input type="text" id="localNumero" required maxlength="2">
+                <label>Contacto:</label>
+                <input type="text" id="localContacto" required maxlength="15" minlength="7">
+                <label>Horario:</label>
+                <input type="text" id="localHorario" required>
+                <label id="labelCategoria">Categoría</label>
+                <input type="text" id="localCategoria" maxlength="30">
+                <label>Descripción:</label>
+                <textarea class="textarea" id="localDescripcion" rows="4" cols="30" maxlength="200" required></textarea>
+                <!-- <input type="text" id="localDescripcion" required maxlength="200"> -->
+                <label>Facebook:</label>
+                <input type="text" id="localFacebook">
+                <label>Tik Tok:</label>
+                <input type="text" id="localTikTok">
+                <label>Imagen:</label>
+                <input type="text" id="localImagen" disabled>
+                <img id="previewImagen" src=""
+                    style="display: none; width: 100px; height: auto;">
+                <p id="previewTexto" style="display: none; color: gray;">Imagen por defecto</p>
+                <button type="button" id="btnSeleccionarImagen"
+                    style="padding: 3px 20px; font-size: calc(.4rem + .4em);">⟲ Cambiar imagen</button>
+                <br>
+                <div class="acciones">
+                    <button type="button">Eliminar</button>
+                    <button type="submit">Guardar cambios</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Añadir un manejador de eventos para eliminar el local usando AJAX
+    // Agregar evento al botón de eliminar en el formulario
+    document.querySelector('#editForm .acciones button:first-child').addEventListener('click', function () {
+        const localId = document.getElementById('localId').value;
+        if (localId) {
+            eliminarLocal(localId);
+        }
+    });
+
+    // Función para eliminar el local
+    function eliminarLocal(localId) {
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "No podrás revertir esta acción.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/borrar-local/${localId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`local-${localId}`)?.remove();
+                        cerrarModal();
+                        Swal.fire({
+                            title: "Eliminado",
+                            text: "El local ha sido eliminado correctamente.",
+                            icon: "success",
+                            confirmButtonColor: "#3085d6",
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "ERROR",
+                            text: data.message || "Hubo un error al eliminar el local.",
+                            icon: "error",
+                            confirmButtonColor: "#d33",
+                            confirmButtonText: "Aceptar"
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: "ERROR",
+                        text: "Ocurrió un problema con la solicitud.",
+                        icon: "error",
+                        confirmButtonColor: "#d33"
+                    });
+                });
+            }
+        });
+    }
+        document.getElementById("btnSeleccionarImagen").addEventListener("click", function () {
+            Swal.fire({
+                title: "Selecciona una Imagen",
+                html: `
+            <div id="galeria" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                <!-- Las imágenes se insertarán aquí dinámicamente -->
+            </div>
+        `,
+                showCancelButton: true,
+                cancelButtonText: "Cancelar",
+                showConfirmButton: false, // No necesitamos botón de confirmación
+                didOpen: () => {
+                    // Cargar imágenes desde el servidor
+                    fetch("/listar-imagenes") // Ruta del backend que devuelve JSON con imágenes
+                        .then(response => response.json())
+                        .then(data => {
+                            const galeria = document.getElementById("galeria");
+                            galeria.innerHTML = ""; // Limpiar antes de insertar
+                            data.imagenes.forEach(img => {
+                                const imgElement = document.createElement("img");
+                                imgElement.src = `/img/${img}`;
+                                imgElement.style = "width: 100px; height: 100px; cursor: pointer; border-radius: 5px;";
+                                imgElement.addEventListener("click", () => {
+                                    document.getElementById("previewImagen").innerHTML = `<img src="/img/${img}" style="max-width: 150px;">`;
+                                    document.getElementById("localImagen").value = img;
+                                    Swal.close(); // Cerrar el modal
+                                });
+                                galeria.appendChild(imgElement);
+                            });
+                        })
+                        .catch(error => console.error("Error al cargar imágenes:", error));
+                }
+            });
+        });
+
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const localId = this.getAttribute('data-id');
+                const localPropietario = this.getAttribute('data-propietario');
+                const localCedula = this.getAttribute('data-cedula');
+                const localNombre = this.getAttribute('data-nombreLocal');
+                const localNumero = this.getAttribute('data-n_local');
+                const localContacto = this.getAttribute('data-contacto');
+                const localHorario = this.getAttribute('data-horario');
+                const localCategoria = this.getAttribute('data-categoria') || '';
+                const localDescripcion = this.getAttribute('data-descripcion');
+                const localFacebook = this.getAttribute('data-facebook');
+                const localTikTok = this.getAttribute('data-TikTok');
+                const localImagen = this.getAttribute('data-imagen');
+
+                // Asignar valores al formulario
+                document.getElementById('localId').value = localId;
+                document.getElementById('localPropietario').value = localPropietario;
+                document.getElementById('localCedula').value = localCedula;
+                document.getElementById('localNombre').value = localNombre;
+                document.getElementById('localNumero').value = localNumero;
+                document.getElementById('localContacto').value = localContacto;
+                document.getElementById('localHorario').value = localHorario;
+                document.getElementById('localCategoria').value = localCategoria;
+                const categoriaField = document.getElementById('localCategoria');
+                const categoriaLabel = document.getElementById('labelCategoria');
+
+                const valorCategoria = categoriaField.value.trim();
+
+                if (valorCategoria === '') {
+                    categoriaField.style.display = 'none';
+                    if (categoriaLabel) categoriaLabel.style.display = 'none'; // Oculta el label si existe
+                } else {
+                    categoriaField.style.display = 'block';
+                    if (categoriaLabel) categoriaLabel.style.display = 'block';
+                }
+
+                document.getElementById('localDescripcion').value = localDescripcion;
+                document.getElementById('localFacebook').value = localFacebook;
+                document.getElementById('localTikTok').value = localTikTok;
+                document.getElementById('localImagen').value = localImagen;
+                const previewImagen = document.getElementById('previewImagen');
+                const previewTexto = document.getElementById('previewTexto'); // Agrega un elemento para el texto
+
+                if (localImagen.trim() !== "") {
+                    previewImagen.src = `/img/${localImagen}`;
+                    previewImagen.style.display = 'block';
+                    previewTexto.style.display = 'none';
+                } else {
+                    previewImagen.style.display = 'none';
+                    previewTexto.textContent = "Imagen por defecto";
+                    previewTexto.style.display = 'block';
+                }
+
+                // Mostrar el modal
+                document.getElementById('editForm').style.display = 'flex';
+            });
+        });
+
+        // Función de validación
+        function validarFormulario() {
+            let valido = true;
+
+            // Validar que la cédula solo contenga números
+            if (!/^\d+$/.test(localCedula.value)) {
+                alert("La cédula solo debe contener números.");
+                valido = false;
+            }
+
+            // Validar que el número de local solo contenga números
+            if (!/^\d+$/.test(localNumero.value)) {
+                alert("El número de local solo debe contener números (Positivos).");
+                valido = false;
+            }
+            if (!/^\d{1,2}:\d{2}\s?(AM|PM)\s?-\s?\d{1,2}:\d{2}\s?(AM|PM)$/.test(localHorario.value)) {
+                alert("El horario debe tener el formato '9:00 AM - 6:00 PM'.");
+                valido = false;
+            }
+            // Validar que el contacto solo contenga números
+            if (!/^\d+$/.test(localContacto.value)) {
+                alert("El contacto solo debe contener números.");
+                valido = false;
+            }
+
+            // Validar que el nombre del propietario solo contenga letras y espacios
+            if (!/^[a-zA-Z\s]+$/.test(localPropietario.value)) {
+                alert("El nombre del propietario solo debe contener letras.");
+                valido = false;
+            }
+
+            // Validar que el nombre del local solo contenga letras y espacios
+            // const nombreLocal = document.getElementById('localNombre');
+            // if (!/^[a-zA-Z\s]+$/.test(nombreLocal.value)) {
+            //     alert("El nombre del local solo debe contener letras.");
+            //     valido = false;
+            // }
+
+            return valido;
+        }
+
+
+        //Cerrar modal
+        const editForm = document.getElementById('editForm');
+        const closeButton = document.querySelector('.close');
+
+        function abrirModal() {
+            editForm.style.display = 'flex';
+            document.body.classList.add('modal-open'); // Bloquea el scroll
+        }
+
+        function cerrarModal() {
+            editForm.style.display = 'none';
+            document.body.classList.remove('modal-open'); // Restaura el scroll
+        }
+
+        // Escuchar clic en los botones de edición
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                abrirModal();
+            });
+        });
+
+        // Cerrar modal al hacer clic en el botón cancelar
+        closeButton.addEventListener('click', function () {
+            cerrarModal();
+        });
+
+        // Cerrar modal al hacer clic fuera del formulario
+        window.addEventListener('click', function (event) {
+            if (event.target === editForm) {
+                cerrarModal();
+            }
+        });
+
+        document.getElementById('editForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (!validarFormulario()) {
+                return;
+            }
+
+            const formData = new FormData();
+            const id = document.getElementById('localId').value;
+            const propietario = document.getElementById('localPropietario').value;
+            const cedula = document.getElementById('localCedula').value;
+            const nombre = document.getElementById('localNombre').value;
+            const numero = document.getElementById('localNumero').value;
+            const contacto = document.getElementById('localContacto').value;
+            const horario = document.getElementById('localHorario').value;
+            const categoria = document.getElementById('localCategoria')?.value || '';
+            const descripcion = document.getElementById('localDescripcion').value;
+            const facebook = document.getElementById('localFacebook').value;
+            const imagen = document.getElementById('localImagen').value;
+
+            fetch('/actualizar-local', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, propietario, cedula, nombre, numero, contacto, horario, categoria, descripcion, facebook, imagen })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire("Éxito", data.message, "success").then(() => {
+                            location.reload(); // Recargar la página para ver los cambios
+                        });
+                    } else {
+                        Swal.fire("Error", data.message, "error");
+                    }
+                })
+                .catch(error => {
+                    Swal.fire("Error", "Hubo un problema con la solicitud.", "error");
+                });
+        });
+
+    </script>
+
+    <%- include("./template/footer.ejs")%>
+
+</body>
+
+</html>

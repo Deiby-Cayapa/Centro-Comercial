@@ -1,0 +1,89 @@
+<head>
+  <link rel="stylesheet" href="/css/menu.css">
+</head>
+<header class="header">
+  <div class="hLogo">
+    <img src="img/por_defecto/icono.png" alt="Buscar" style="height: 60px; padding: 15px; transform: scale(1.3);">
+    <h2><a style="color: #f4f4f4;text-shadow: 0 0 5px #000;text-decoration: none;" href="/">CENTRO COMERCIAL</a></h2>
+  </div>
+  <button id="abrir" class="menub">☰</button>
+  <div id="men" class="men">
+      <button id="cerrar" class="menuc">✖</button>
+      <ul class="xd">
+        <li><a class="aButton" href="/">INICIO</a></li>
+        <li id="btn-md" class="desp">
+          <a class="aButton">LOCALES ▼</a>
+          <div style="display: flex;justify-content: flex-start; overflow-y: auto;
+          max-height: 300px;background: transparent;
+          margin-top: 10px;
+          border-radius: 5px;
+          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);" class="as">
+            <a href="zona-abarrotes">ABARROTES, BAZAR</a>
+            <a href="zona-batidos">JUGOS, BATIDOS</a>
+            <a href="zona-cafeteria">CAFETERIA</a>
+            <a href="zona-carnes">CARNES, TERCENAS, FRIGORIFICOS</a>
+            <a href="zona-comedores">COMEDORES</a>
+            <a href="zona-externos">LOCALES EXTERNOS</a>
+            <a href="zona-frutas">FRUTAS</a>
+            <a href="zona-islas">ISLAS</a>
+            <a href="zona-montes">MONTES DE HORCHATA</a>
+            <a href="zona-productos_zona">PRODUCTOS DE LA ZONA</a>
+            <a href="zona-ropa">ROPA</a>
+            <a href="zona-verdura">VERDURAS</a>
+          </div>
+
+        </li>
+      </ul>
+    </div>
+    <script>
+const men = document.querySelector("#men");
+const abrir = document.querySelector("#abrir");
+const cerrar = document.querySelector("#cerrar");
+let despl = document.querySelector("#btn-md");
+const body = document.querySelector("body");
+const header = document.querySelector(".header");
+
+function getScrollbarWidth() {
+    return window.innerWidth - document.documentElement.clientWidth + "px";
+}
+abrir.addEventListener("click", () =>{
+    men.classList.add("visible");
+    body.style.overflowY = "hidden";
+
+})
+cerrar.addEventListener("click", () =>{
+    men.classList.remove("visible");
+    body.style.overflowY = "auto";
+})
+document.addEventListener("click", (e) => {
+    if (!men.contains(e.target) && !abrir.contains(e.target)) {
+      men.classList.remove("visible");
+      body.style.overflowY = "auto";
+    }
+  });
+
+  despl.addEventListener("click", (e) => {
+    e.stopPropagation(); // Evita que el clic se propague
+    despl.classList.toggle("nas"); // Se aplica el toggle en el botón "LOCALES"
+    if (despl.classList.contains("nas")) {
+      header.style.marginRight = getScrollbarWidth();
+        document.documentElement.style.setProperty("--scrollbar-width", getScrollbarWidth());
+        body.classList.add("no-scroll");
+    } else {
+      header.style.marginRight = "0px";
+        body.classList.remove("no-scroll");
+        document.documentElement.style.setProperty("--scrollbar-width", "0px");
+    }
+});
+
+document.addEventListener("click", (e) => {
+    if (!despl.contains(e.target)) {
+      header.style.marginRight = "0px";
+        despl.classList.remove("nas");
+        body.classList.remove("no-scroll");
+        document.documentElement.style.setProperty("--scrollbar-width", "0px");
+    }
+});
+    </script>
+    <script src="/js/programa.js"></script>
+  </header>
