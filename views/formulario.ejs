@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -7,82 +8,356 @@
     <link rel="stylesheet" href="/css/admin.css">
     <script src="/js/verificarSesion.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .cont {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-agregar {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            border: 1px solid #e8e8e8;
+        }
+
+        h1 {
+            color: #1a1a1a;
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .linea {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 30px 0;
+        }
+
+        .form-section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            color: #374151;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+
+        .input-form {
+            margin-bottom: 30px;
+        }
+
+        .input-form label {
+            display: block;
+            color: #374151;
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        .input-form input[type="text"],
+        .input-form input[type="email"],
+        .input-form input[type="number"],
+        .input-form select,
+        .input-form textarea {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+
+        .input-form input:focus,
+        .input-form select:focus,
+        .input-form textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .input-form textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .image-selector {
+            margin: 30px 0;
+        }
+
+        .btn-select-image {
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            padding: 11px 24px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .btn-select-image:hover {
+            background-color: #111827;
+        }
+
+        #previewImagen {
+            margin-top: 20px;
+        }
+
+        #previewImagen img {
+            max-width: 200px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .submit {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .submit:hover {
+            background-color: #1d4ed8;
+        }
+
+        .submit:active {
+            transform: scale(0.98);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-agregar {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Select mejorado */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        /* Mensajes de validación */
+        .input-form input:invalid:not(:placeholder-shown),
+        .input-form select:invalid {
+            border-color: #ef4444;
+        }
+
+        .input-form input:valid:not(:placeholder-shown) {
+            border-color: #10b981;
+        }
+
+        /* Galería de imágenes profesional */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #f9fafb;
+            border-radius: 6px;
+        }
+
+        .gallery-item {
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            background-color: #fff;
+        }
+
+        .gallery-item:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .success-message {
+            color: #059669;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+    </style>
 </head>
 
 <body>
     <div class="cont">
         <form class="form-agregar" id="formulario_Crear" action="/agregar-local" method="post">
-            <!-- <div class="fondo"></div> -->
-            <h1>Crear Nuevo</h1>
+            <h1>Crear Nuevo Local</h1>
+            <p class="subtitle">Complete el formulario para registrar un nuevo negocio en el centro comercial</p>
             <div class="linea"></div>
-            <div class="input-form">
-                <label>* Propietario: </label>
-                <input type="text" id="crear_propietario" name="propietario" required>
-            </div>
-            <div class="input-form">
-                <label>* Cedula: </label>
-                <input type="text" id="crear_cedula" name="cedula" required>
-            </div>
-            <div class="input-form">
-                <label>* Nombre del Local: </label>
-                <input type="text" id="crear_nombre" name="nombre_local" required>
-            </div>
-            <div class="input-form">
-                <label>* Telefono: </label>
-                <input type="text" id="crear_telefono" name="telefono" required>
-            </div>
-            <div class="input-form">
-                <label> Email: </label>
-                <input type="email" id="crear_email" name="email">
-            </div>
-            <div class="input-form">
-                <label>Facebook:</label>
-                <input type="text" id="crear_facebook" name="facebook">
-            </div>
-            <div class="input-form">
-                <label>Tik Tok:</label>
-                <input type="text" id="crear_tiktok" name="tiktok">
-            </div>
-            <div class="input-form">
-                <label>* Descripcion: </label>
-                <textarea class="textarea" id="descripcion" name="descripcion" rows="3" cols="50" required></textarea>
-            </div>
-            <div id="local_externo" class="input-form" style="display: none;">
-                <label>Tipo de Local:</label>
-                <input type="text" name="local_externo" id="local_externo_input">
+
+            <!-- SECCIÓN: INFORMACIÓN DEL PROPIETARIO -->
+            <div class="form-section">
+                <h2 class="section-title">Información del Propietario</h2>
+                
+                <div class="input-row">
+                    <div class="input-form">
+                        <label><span class="required">*</span> Propietario</label>
+                        <input type="text" id="crear_propietario" name="propietario" placeholder="Nombre completo" required>
+                    </div>
+                    <div class="input-form">
+                        <label><span class="required">*</span> Cédula</label>
+                        <input type="text" id="crear_cedula" name="cedula" placeholder="10 dígitos" maxlength="10" required>
+                    </div>
+                </div>
             </div>
 
-            <div class="input-form2">
-                <div>
-                    <label>Categoría:</label>
-                    <select id="crear_categoria" name="categoria">
-                        <option value="" disabled selected>Elegir categoría</option>
-                        <option value="locales_abarrotes">Abarrotes</option>
-                        <option value="locales_batidos">Batidos</option>
-                        <option value="locales_cafeteria">Cafeterias</option>
-                        <option value="locales_carnes">Carnes, Frigorificos</option>
-                        <option value="locales_comedores">Comedor</option>
-                        <option value="locales_externos">Locales Externos</option>
-                        <option value="locales_frutas">Frutas</option>
-                        <option value="locales_islas">Isla</option>
-                        <option value="locales_montes">Montes de Horchatas</option>
-                        <option value="locales_productos_zona">Productos de la Zona</option>
-                        <option value="locales_ropa">Ropa</option>
-                        <option value="locales_verduras">Verduras</option>
-                    </select>
+            <!-- SECCIÓN: INFORMACIÓN DEL LOCAL -->
+            <div class="form-section">
+                <h2 class="section-title">Información del Local</h2>
+                
+                <div class="input-form">
+                    <label><span class="required">*</span> Nombre del Local</label>
+                    <input type="text" id="crear_nombre" name="nombre_local" placeholder="Nombre comercial del negocio" required>
                 </div>
-                <div>
-                    <label>* Horario: </label>
+
+                <div class="input-row">
+                    <div class="input-form">
+                        <label><span class="required">*</span> Categoría</label>
+                        <select id="crear_categoria" name="categoria" required>
+                            <option value="" disabled selected>Seleccione una categoría</option>
+                            <option value="locales_abarrotes">Abarrotes</option>
+                            <option value="locales_batidos">Batidos</option>
+                            <option value="locales_cafeteria">Cafeterías</option>
+                            <option value="locales_carnes">Carnes, Frigoríficos</option>
+                            <option value="locales_comedores">Comedor</option>
+                            <option value="locales_externos">Locales Externos</option>
+                            <option value="locales_frutas">Frutas</option>
+                            <option value="locales_islas">Isla</option>
+                            <option value="locales_montes">Montes de Horchatas</option>
+                            <option value="locales_productos_zona">Productos de la Zona</option>
+                            <option value="locales_ropa">Ropa</option>
+                            <option value="locales_verduras">Verduras</option>
+                        </select>
+                    </div>
+
+                    <div class="input-form">
+                        <label><span class="required">*</span> Nº Local</label>
+                        <input type="number" id="crear_nLocal" name="n_local" placeholder="Número del local" min="1" required>
+                    </div>
+                </div>
+
+                <div id="local_externo" class="input-form" style="display: none;">
+                    <label><span class="required">*</span> Tipo de Local</label>
+                    <input type="text" name="local_externo" id="local_externo_input" placeholder="Especifique el tipo de local">
+                </div>
+
+                <div class="input-form">
+                    <label><span class="required">*</span> Horario</label>
                     <input type="text" id="crear_horario" name="horario" placeholder="Ej: 9:00 AM - 6:00 PM" required>
                 </div>
-                <div>
-                    <label>* Nº Local: </label>
-                    <input type="number" id="crear_nLocal" placeholder="" name="n_local" required>
+
+                <div class="input-form">
+                    <label><span class="required">*</span> Descripción</label>
+                    <textarea id="descripcion" name="descripcion" placeholder="Describe brevemente los productos o servicios que ofrece el local" required></textarea>
                 </div>
             </div>
-            <button type="button" id="btnSeleccionarImagen" style="padding: 3px 20px; font-size: calc(.4rem + .4em);">📷Seleccionar Imagen</button>
-            <input type="hidden" id="imagenSeleccionada" name="url_imagen" required>
-            <div id="previewImagen" style="margin-top: 10px;"></div>
+
+            <!-- SECCIÓN: CONTACTO Y REDES SOCIALES -->
+            <div class="form-section">
+                <h2 class="section-title">Contacto y Redes Sociales</h2>
+                
+                <div class="input-row">
+                    <div class="input-form">
+                        <label><span class="required">*</span> Teléfono</label>
+                        <input type="text" id="crear_telefono" name="telefono" placeholder="10 dígitos" maxlength="10" required>
+                    </div>
+                    <div class="input-form">
+                        <label>Email</label>
+                        <input type="email" id="crear_email" name="email" placeholder="correo@ejemplo.com">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-form">
+                        <label>Facebook</label>
+                        <input type="text" id="crear_facebook" name="facebook" placeholder="URL de Facebook">
+                    </div>
+                    <div class="input-form">
+                        <label>TikTok</label>
+                        <input type="text" id="crear_tiktok" name="tiktok" placeholder="Usuario de TikTok">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN: IMAGEN -->
+            <div class="form-section image-selector">
+                <h2 class="section-title">Imagen del Local</h2>
+                <button type="button" id="btnSeleccionarImagen" class="btn-select-image">
+                    Seleccionar Imagen
+                </button>
+                <input type="hidden" id="imagenSeleccionada" name="url_imagen" required>
+                <div id="previewImagen"></div>
+            </div>
 
             <% if (typeof mensaje !== "undefined") { %>
                 <script>
@@ -94,120 +369,170 @@
                     });
                 </script>
             <% } %>
-                    <div class="linea"></div>
-                    <input class="submit" id="formulario_crear" type="submit" value="Agregar Negocio">
+
+            <div class="linea"></div>
+            <input class="submit" id="formulario_crear" type="submit" value="Agregar Negocio">
         </form>
-        
     </div>
+
     <%- include("./template/config.ejs")%>
-    <script>
-        if (window.history.replaceState) {
-        window.history.replaceState(null, null, "formulario");
-    }
     
-    document.getElementById("formulario_Crear").addEventListener("submit", function(event) {
-    let propietario = document.getElementById("crear_propietario").value.trim();
-    let cedula = document.getElementById("crear_cedula").value.trim();
-    let nombreLocal = document.getElementById("crear_nombre").value.trim();
-    let telefono = document.getElementById("crear_telefono").value.trim();
-    let email = document.getElementById("crear_email").value.trim();
-    let descripcion = document.getElementById("descripcion").value.trim();
-    let nLocal = document.getElementById("crear_nLocal").value.trim();
-    let categoria = document.getElementById("crear_categoria").value;
-    let horario = document.getElementById("crear_horario").value.trim();
-
-    let errores = [];
-
-    // Validar que el propietario solo contenga letras y espacios
-    if (!/^[A-Za-z\s]+$/.test(propietario)) {
-        errores.push("El propietario solo debe contener letras y espacios.");
-    }
-
-    if (!/^\d{10}$/.test(cedula)) {
-        errores.push("La cédula debe contener solo 10 dígitos numéricos.");
-    }
-
-    // Validar número de local (Solo números positivos)
-    if (!/^\d+$/.test(nLocal) || parseInt(nLocal) <= 0) {
-        errores.push("El número de local debe ser un número positivo.");
-    }
-
-    if (!/^\d{10}$/.test(telefono)) {
-        errores.push("El teléfono debe contener 10 dígitos numéricos.");
-    }
-
-    // Validar email con formato adecuado
-    if (email !== "" && !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-        errores.push("Ingrese un correo electrónico válido.");
-    }
-
-    // Validar que la categoría haya sido seleccionada
-    if (!categoria) {
-        errores.push("Debe seleccionar una categoría.");
-    }
-
-    // Validar horario con formato HH:MM AM/PM - HH:MM AM/PM
-    if (!/^\d{1,2}:\d{2}\s?(AM|PM)\s?-\s?\d{1,2}:\d{2}\s?(AM|PM)$/.test(horario)) {
-        errores.push("El horario debe tener el formato '9:00 AM - 6:00 PM'.");
-    }
-
-    if (errores.length > 0) {
-        event.preventDefault(); // Evita que el formulario se envíe
-        alert(errores.join("\n"));
-    }
-});
-document.getElementById("btnSeleccionarImagen").addEventListener("click", function() {
-    Swal.fire({
-        title: "Selecciona una Imagen",
-        html: `
-            <div id="galeria" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-                <!-- Las imágenes se insertarán aquí dinámicamente -->
-            </div>
-        `,
-        showCancelButton: true,
-        cancelButtonText: "Cancelar",
-        showConfirmButton: false, // No necesitamos botón de confirmación
-        didOpen: () => {
-            // Cargar imágenes desde el servidor
-            fetch("/listar-imagenes") // Ruta del backend que devuelve JSON con imágenes
-                .then(response => response.json())
-                .then(data => {
-                    const galeria = document.getElementById("galeria");
-                    galeria.innerHTML = ""; // Limpiar antes de insertar
-                    data.imagenes.forEach(img => {
-                        const imgElement = document.createElement("img");
-                        imgElement.src = `/img/${img}`;
-                        imgElement.style = "width: 100px; height: 100px; cursor: pointer; border-radius: 5px;";
-                        imgElement.addEventListener("click", () => {
-                            document.getElementById("imagenSeleccionada").value = img;
-                            document.getElementById("previewImagen").innerHTML = `<img src="/img/${img}" style="max-width: 150px;">`;
-                            Swal.close(); // Cerrar el modal
-                        });
-                        galeria.appendChild(imgElement);
-                    });
-                })
-                .catch(error => console.error("Error al cargar imágenes:", error));
+    <script>
+        // Limpiar el historial para evitar reenvíos
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, "formulario");
         }
-    });
-});
+        
+        // Validación del formulario
+        document.getElementById("formulario_Crear").addEventListener("submit", function(event) {
+            let propietario = document.getElementById("crear_propietario").value.trim();
+            let cedula = document.getElementById("crear_cedula").value.trim();
+            let nombreLocal = document.getElementById("crear_nombre").value.trim();
+            let telefono = document.getElementById("crear_telefono").value.trim();
+            let email = document.getElementById("crear_email").value.trim();
+            let descripcion = document.getElementById("descripcion").value.trim();
+            let nLocal = document.getElementById("crear_nLocal").value.trim();
+            let categoria = document.getElementById("crear_categoria").value;
+            let horario = document.getElementById("crear_horario").value.trim();
+
+            let errores = [];
+
+            // Validar que el propietario solo contenga letras y espacios
+            if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(propietario)) {
+                errores.push("El propietario solo debe contener letras y espacios.");
+            }
+
+            if (!/^\d{10}$/.test(cedula)) {
+                errores.push("La cédula debe contener solo 10 dígitos numéricos.");
+            }
+
+            // Validar número de local (Solo números positivos)
+            if (!/^\d+$/.test(nLocal) || parseInt(nLocal) <= 0) {
+                errores.push("El número de local debe ser un número positivo.");
+            }
+
+            if (!/^\d{10}$/.test(telefono)) {
+                errores.push("El teléfono debe contener 10 dígitos numéricos.");
+            }
+
+            // Validar email con formato adecuado
+            if (email !== "" && !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+                errores.push("Ingrese un correo electrónico válido.");
+            }
+
+            // Validar que la categoría haya sido seleccionada
+            if (!categoria) {
+                errores.push("Debe seleccionar una categoría.");
+            }
+
+            // Validar horario con formato HH:MM AM/PM - HH:MM AM/PM
+            if (!/^\d{1,2}:\d{2}\s?(AM|PM)\s?-\s?\d{1,2}:\d{2}\s?(AM|PM)$/i.test(horario)) {
+                errores.push("El horario debe tener el formato '9:00 AM - 6:00 PM'.");
+            }
+
+            if (errores.length > 0) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Errores en el formulario',
+                    html: errores.join("<br>"),
+                    confirmButtonText: 'Entendido'
+                });
+            }
+        });
+
+        // Selector de imágenes
+        document.getElementById("btnSeleccionarImagen").addEventListener("click", function() {
+            Swal.fire({
+                title: "Seleccionar Imagen",
+                html: `
+                    <div id="galeria" class="gallery-container">
+                        <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                            <div style="border: 3px solid #e5e7eb; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                            <p style="margin-top: 10px; color: #6b7280; font-size: 0.9em;">Cargando imágenes...</p>
+                        </div>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `,
+                width: '800px',
+                showCancelButton: true,
+                cancelButtonText: "Cancelar",
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'swal-professional'
+                },
+                didOpen: () => {
+                    fetch("/listar-imagenes")
+                        .then(response => response.json())
+                        .then(data => {
+                            const galeria = document.getElementById("galeria");
+                            galeria.innerHTML = "";
+                            galeria.className = "gallery-container";
+                            
+                            if (data.imagenes.length === 0) {
+                                galeria.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #6b7280;">No hay imágenes disponibles</p>';
+                                return;
+                            }
+                            
+                            data.imagenes.forEach(img => {
+                                const imgContainer = document.createElement("div");
+                                imgContainer.className = "gallery-item";
+                                
+                                const imgElement = document.createElement("img");
+                                imgElement.src = `/img/${img}`;
+                                imgElement.alt = img;
+                                
+                                imgContainer.appendChild(imgElement);
+                                
+                                imgContainer.addEventListener("click", () => {
+                                    document.getElementById("imagenSeleccionada").value = img;
+                                    document.getElementById("previewImagen").innerHTML = `
+                                        <p class="success-message">✓ Imagen seleccionada correctamente</p>
+                                        <img src="/img/${img}" style="max-width: 200px; border-radius: 6px; border: 1px solid #e5e7eb;">
+                                    `;
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Imagen seleccionada',
+                                        text: 'La imagen se ha agregado correctamente',
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+                                });
+                                
+                                galeria.appendChild(imgContainer);
+                            });
+                        })
+                        .catch(error => {
+                            console.error("Error al cargar imágenes:", error);
+                            document.getElementById("galeria").innerHTML = 
+                                '<p style="grid-column: 1/-1; text-align: center; color: #dc2626;">Error al cargar las imágenes</p>';
+                        });
+                }
+            });
+        });
+
+        // Mostrar/ocultar campo de tipo de local externo
         document.getElementById("crear_categoria").addEventListener("change", function () {
             const divOtro = document.getElementById("local_externo");
             const inputOtro = document.getElementById("local_externo_input");
 
             if (this.value === "locales_externos" || this.value === "locales_islas") {
-                divOtro.style.display = "flex"; // Mostrar el div
-                inputOtro.required = true; // Hacer el input obligatorio
+                divOtro.style.display = "block";
+                inputOtro.required = true;
             } else {
-                divOtro.style.display = "none"; // Ocultar el div
-                inputOtro.required = false; // Quitar la obligatoriedad
-                inputOtro.value = ""; // Limpiar el campo
+                divOtro.style.display = "none";
+                inputOtro.required = false;
+                inputOtro.value = "";
             }
         });
-        
     </script>
 
-<%- include("./template/footer.ejs")%>
-    
+    <%- include("./template/footer.ejs")%>
 </body>
 
 </html>

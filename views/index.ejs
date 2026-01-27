@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="menu.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -11,52 +10,125 @@
 
   <title>Centro Comercial - Yantzaza</title>
 
-  <meta name="description" content="Descripción clara y atractiva que incluya palabras clave. Máximo 160 caracteres.">
-  <meta name="keywords" content="palabra clave 1, palabra clave 2, palabra clave 3">
-  <meta name="author" content="Tu nombre o empresa">
+  <style>
+    /* RESET TOTAL */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { overflow-x: hidden; }
 
-  <!-- SEO para redes sociales (Open Graph) -->
-  <meta property="og:title" content="Centro comercial/Mercado Yantzaza">
-  <meta property="og:description" content="Ven y visita nuestros locales y las variedades que ofrecen estos">
-  <meta property="og:image" content="img/por_defecto/icono.png">
-  <meta property="og:url" content="https://tusitio.com"> <!-- remplazar por dominio web -->
-  <meta property="og:type" content="website">
+    /* HEADER PRIORIDAD MÁXIMA */
+    header, .header, nav {
+      position: relative;
+      z-index: 9999 !important;
+    }
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Centro comercial/Mercado Yantzaza">
-  <meta name="twitter:description" content="Ven y visita nuestros locales y las variedades que ofrecen estos">
-  <meta name="twitter:image" content="img/por_defecto/icono.png">
+    /* CONTENEDOR DEL BANNER */
+    .hero-container {
+      position: relative;
+      width: 100%;
+      height: 90vh; /* Altura controlada */
+      overflow: hidden;
+      background-color: #000;
+    }
 
-  <!-- Favicon -->
-  <link rel="icon" href="img/por_defecto/icono.png" type="image/x-icon">
+    /* CAPA DE TEXTO (ESQUINA Y CLICABLE) */
+    .hero-text-box {
+      position: absolute;
+      z-index: 100;
+      top: 40px;
+      left: 30px;
+      pointer-events: none; /* Deja pasar los clics al menú */
+    }
 
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://tusitio.com">
+    .hero-text-box h1 {
+      color: white;
+      font-family: 'Lucida Sans', sans-serif;
+      font-size: calc(1.5rem + 2vw);
+      line-height: 1.1;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8), 0 0 5px rgba(0, 81, 135, 0.5);
+    }
 
+    .hero-text-box span {
+      color: #FFD700;
+      font-size: 0.7em;
+      display: block;
+      margin-top: 5px;
+    }
+
+    /* SLIDER DINÁMICO */
+    .slider-frame {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .slider-frame ul {
+      display: flex;
+      padding: 0;
+      width: 400%; /* 4 imágenes */
+      height: 100%;
+      list-style: none;
+      /* Animación forzada aquí */
+      animation: slide-animation 20s infinite alternate ease-in-out;
+    }
+
+    .slider-frame li {
+      width: 100%;
+      height: 100%;
+    }
+
+    .slider-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* DEFINICIÓN DE LA ANIMACIÓN */
+    @keyframes slide-animation {
+      0% { margin-left: 0; }
+      20% { margin-left: 0; }
+      25% { margin-left: -100%; }
+      45% { margin-left: -100%; }
+      50% { margin-left: -200%; }
+      70% { margin-left: -200%; }
+      75% { margin-left: -300%; }
+      100% { margin-left: -300%; }
+    }
+
+    /* RESPONSIVO MÓVIL */
+    @media (max-width: 768px) {
+      .hero-container { height: 45vh; }
+      .hero-text-box { top: 20px; left: 20px; }
+      .hero-text-box h1 { font-size: 1.4rem; }
+    }
+  </style>
 </head>
 
 <body>
-<style>
-  .xd li > div>a{
-    padding: 5px 0;
- }z
-</style>
+
 <%- include("./template/header.ejs")%>
-<div style="display: flex;justify-content: flex-start;align-items: flex-start;">
-  <div style="position: absolute;z-index: 2;text-align: start;border-radius: 15px;">
-    <h1 class="animate__animated animate__fadeInLeft" style="z-index: 0;color: rgb(255, 255, 255);font-size: calc(3.5rem + 2.7vw);padding:70px 0 0 20px;text-shadow:0 0 5px #000, 20px 13px 10px rgb(0, 81, 135);font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">CENTRO COMERCIAL <br>CIUDAD YANTZAZA</h1>
+
+<div class="hero-container">
+  <div class="hero-text-box">
+    <h1 class="animate__animated animate__fadeInLeft">
+      CENTRO COMERCIAL <br>
+      <span>CIUDAD YANTZAZA</span>
+    </h1>
   </div>
-  <div class="slider">
+
+  <div class="slider-frame">
     <ul>
-      <li><img src="/img/por_defecto/slider1.jpg"></li>
-      <li><img src="/img/por_defecto/slider2.jpg"></li>
-      <li><img src="/img/por_defecto/slider3.jpg"></li>
-      <li><img src="/img/por_defecto/slider4.jpg"></li>
+      <li><img src="/img/por_defecto/slider1.jpg" alt="Img 1"></li>
+      <li><img src="/img/por_defecto/slider2.jpg" alt="Img 2"></li>
+      <li><img src="/img/por_defecto/slider3.jpg" alt="Img 3"></li>
+      <li><img src="/img/por_defecto/slider4.jpg" alt="Img 4"></li>
     </ul>
   </div>
 </div>
 
 <%- include("./template/footer.ejs")%>
+
 </body>
 </html>

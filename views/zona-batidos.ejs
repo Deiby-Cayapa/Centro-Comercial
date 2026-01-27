@@ -1,97 +1,335 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="img/por_defecto/icono.png" type="image/x-icon">
-  <title>Jugos - Batidos - Centro Comercial</title>
-<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/menu.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="img/por_defecto/icono.png" type="image/x-icon">
+    <title>Jugos - Batidos - Centro Comercial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/menu.css">
+
+    <style>
+        :root {
+            --primary-blue: #005187;
+            --accent-gold: #ffd700;
+            --bg-light: #f4f7f6;
+            --text-dark: #2c3e50;
+        }
+
+        body {
+            background-color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Nueva sección hero minimalista */
+        .hero-section {
+            background-color: white;
+            padding: 60px 0 40px 0;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-gold), #ffed4e);
+            color: var(--text-dark);
+            padding: 8px 24px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 400;
+            margin-bottom: 0;
+        }
+
+        /* Línea decorativa sutil */
+        .hero-divider {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+            margin: 30px auto;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+            font-size: 1.8rem;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: var(--accent-gold);
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Estilo de la Carta (Card) */
+        .custom-card {
+            background: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .custom-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 81, 135, 0.15);
+            border-color: var(--primary-blue);
+        }
+
+        /* Contenedor de Imagen Proporcional */
+        .img-container {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .custom-card:hover .img-container img {
+            transform: scale(1.08);
+        }
+
+        .card-category-tag {
+            background: var(--primary-blue);
+            color: white;
+            font-size: 0.7rem;
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            display: inline-block;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .local-name {
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-description {
+            color: #666;
+            font-size: 0.875rem;
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 auto 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .info-list li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.4;
+        }
+
+        .info-list strong {
+            color: var(--text-dark);
+            font-weight: 600;
+            min-width: fit-content;
+        }
+
+        .social-bar {
+            padding: 18px;
+            background: linear-gradient(to bottom, #ffffff, #f9fafb);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-top: 1px solid #e8e8e8;
+            margin-top: auto;
+        }
+
+        .social-bar a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .social-bar a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .social-bar a img {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .img-container {
+                height: 200px;
+            }
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .custom-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .custom-card:nth-child(1) { animation-delay: 0.1s; }
+        .custom-card:nth-child(2) { animation-delay: 0.2s; }
+        .custom-card:nth-child(3) { animation-delay: 0.3s; }
+        .custom-card:nth-child(4) { animation-delay: 0.4s; }
+        .custom-card:nth-child(5) { animation-delay: 0.5s; }
+        .custom-card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
 </head>
 
 <body>
-    <style>
-        li{
-            color: rgba(0, 0, 89, 0.792);
-            font-size: 17px;
-        }
-    </style>
     <%- include("./template/header.ejs")%>
 
-        <main>
-            <section class="py-5 text-center container">
-                <div class="row py-lg-5">
-                    <div class="col-lg-6 col-md-8 mx-auto">
-                        <br>
-                        <h1>CENTRO COMERCIAL - YANTZAZA</h1>
-                        <p>Explora los productos disponibles en los locales de Jugos y batidos.</p>
-                    </div>
-                </div>
-            </section>
+    <main>
+        <!-- Nueva sección hero minimalista -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-badge">JUGOS Y BATIDOS</div>
+                <h1 class="hero-title">JUGOS Y BATIDOS</h1>
+                <p class="hero-subtitle">Bebidas naturales y refrescantes para tu día</p>
+                <div class="hero-divider"></div>
+            </div>
+        </section>
 
-            <div class="contenedor">
-                <h2 class="text-center">Jugos y Batiods</h2>
-                <br>
-                <div style="width: 100%;" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    <% locales.forEach(local=> { %>
-                        <div class="col">
-                            <div class="card">
-                                <p style="text-align: center; text-transform: uppercase; font-size: 20px; margin: 5px 0;color:red;font-family: 'Poppins', sans-serif;"> <%= local.nombre_local %>
+        <div class="container mb-5 pb-5">
+            <div class="row g-4">
+                <% locales.forEach(local => { %>
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <div class="custom-card">
+                            <div class="img-container">
+                                <img src="/img/<%= local.imagen %>" 
+                                     onerror="this.onerror=null; this.src='/img/por_defecto/externos_por_defecto.webp';"
+                                     alt="<%= local.nombre_local %>">
+                            </div>
+
+                            <div class="card-body p-4">
+                                <span class="card-category-tag">Local #<%= local.n_local %></span>
+                                <h3 class="local-name text-uppercase"><%= local.nombre_local %></h3>
+                                
+                                <p class="card-description">
+                                    "<%= local.descripcion || 'Sin descripción disponible' %>"
                                 </p>
-                                <img style="border-radius: 0;" src="/img/<%= local.imagen %>" 
-                                onerror="this.onerror=null; this.src='/img/por_defecto/externos_por_defecto.webp';"
-                                class="bd-placeholder-img card-img-top" 
-                                style="object-fit: cover;" width="100%" height="225" 
-                                alt="Imagen">
-                                <hr>
-                                <div class="card-body">
-                                    <i class="card-text">
-                                        <%= local.descripcion %>
-                                    </i>
-                                    <ul>
-                                        
-                                        <li> - Propietario: <%= local.propietario %>
-                                        </li>
-                                        <li> - Local N°: <%= local.n_local %></li>
-                                        <li> - <%= local.horario %>
-                                        </li>
-                                        <li> - Telefono: <%= local.contacto %>
-                                        </li>
-                                    </ul>
-                                    <hr>
-                                    <% if (local.contacto) { 
-                                        let numeroLimpio = local.contacto.startsWith("09") ? local.contacto.substring(1) : local.contacto;
-                                        let numeroConCodigo = `+593${numeroLimpio}`; // 593 es el código de país de Ecuador, cámbialo según sea necesario.
-                                   %>
-                                   <div class="redes_sociales">
 
-                                       <a style="color: rgb(3, 180, 3);" href="https://wa.me/<%= numeroConCodigo %>" target="_blank" rel="noopener noreferrer">
-                                           <i class="bi bi-whatsapp"></i>
-                                           <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                               <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                            </svg>
-                                        </a>
-                                        <% } %>
-                                        <% if (local.facebook != null && local.facebook != '') { %>
-                                            <a style="color: blue;" href="<%= local.facebook %>" target="_blank" rel="noopener noreferrer">
-                                                <i class="bi bi-facebook"></i><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                                                    <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
-                                                </svg>
-                                            </a>
-                                        <% } %>
-                                        <% if (local.tiktok != null && local.tiktok !='') { %>
-                                            <a style="color: rgb(0, 0, 0);" href="<%= local.tiktok %>" target="_blank" rel="noopener noreferrer">
-                                                <i class="bi bi-tiktok"></i><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" xmlns:xlink="http://www.w3.org/1999/xlink" aria-label="TikTok" role="img" viewBox="0 0 512 512" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect rx="15%" height="512" width="512" fill="#ffffff"></rect><defs><path id="t" d="M219 200a117 117 0 1 0 101 115v-128a150 150 0 0 0 88 28v-63a88 88 0 0 1-88-88h-64v252a54 54 0 1 1-37-51z" style="mix-blend-mode:multiply"></path></defs><use href="#t" fill="#f05" x="18" y="15"></use><use href="#t" fill="#0ee"></use></g></svg>
-                                            </a>
-                                        <% } %>
-                                    </div>
-                                </div>
+                                <ul class="info-list">
+                                    <li>
+                                        <strong>👤 Propietario:</strong> 
+                                        <span><%= local.propietario %></span>
+                                    </li>
+                                    <li>
+                                        <strong>⏰ Horario:</strong> 
+                                        <span><%= local.horario %></span>
+                                    </li>
+                                    <li>
+                                        <strong>📞 Contacto:</strong> 
+                                        <span><%= local.contacto %></span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="social-bar">
+                                <% if (local.contacto) { 
+                                    let numeroLimpio = local.contacto.startsWith("09") ? local.contacto.substring(1) : local.contacto;
+                                    let numeroConCodigo = `+593${numeroLimpio}`;
+                                %>
+                                    <a href="https://wa.me/<%= numeroConCodigo %>" target="_blank" title="WhatsApp">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+                                    </a>
+                                <% } %>
+
+                                <% if (local.facebook) { %>
+                                    <a href="<%= local.facebook %>" target="_blank" title="Facebook">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png" alt="Facebook">
+                                    </a>
+                                <% } %>
+
+                                <% if (local.tiktok) { %>
+                                    <a href="<%= local.tiktok %>" target="_blank" title="TikTok">
+                                        <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok">
+                                    </a>
+                                <% } %>
                             </div>
                         </div>
-                        <% }); %>
-                </div>
+                    </div>
+                <% }); %>
             </div>
-        </main>
-        <%- include("./template/footer.ejs")%>
-    </body>
+        </div>
+    </main>
+
+    <%- include("./template/footer.ejs")%>
+</body>
 </html>

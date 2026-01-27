@@ -11,43 +11,22 @@
                  transform: translateY(2px)
                }
              }
-           </style>
+            </style>
            <path class="slide-11" fill="#0A0A30" d="M6.832 10.516a.857.857 0 111.097-1.317l4.594 3.828L17.117 9.2a.857.857 0 011.098 1.317l-5.132 4.276a.853.853 0 01-.933.123.85.85 0 01-.187-.123l-5.131-4.276z"/>
          </svg>
          <i class="bi bi-caret-down-fill"></i>
         </strong>
     </a>
     <ul id="desp" class="desp drop">
-        <li id="btnMedios" style="color: blue;"><a href="/formulario" style="color: blue;">Agregar nuevo Local</a></li>
-        <li id="btnMedios" style="color: blue;"><a href="/tabla-locales" style="color: blue;">Tabla de Locales</a></li>
-        <li id="btnMedios" style="color: blue;"><a href="/medios" style="color: blue;">Medios/Imagenes</a></li>
-        <!-- <li id="btnConfig" style="color: blue;"><a>Cambir Contraseña</a></li> -->
+        <li id="btnMedios"><a href="/formulario">Agregar nuevo Local</a></li>
+        <li id="btnMedios"><a href="/tabla-locales">Tabla de Locales</a></li>
+        <li id="btnMedios"><a href="/medios">Medios/Imagenes</a></li>
         <li>
             <hr>
         </li>
-        <li id="salir" style="color: red;"><a>Cerrar Sesion </a></li>
+        <li id="salir"><a>Cerrar Sesion </a></li>
     </ul>
 </div>
-
-<!-- <div id="configModal" class="modal">
-    <form class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Cambiar Usuario/Contraseña</h2>
-        <div class="input-form">
-            <label>Contraseña:</label>
-            <input type="text" id="nombreUsuario" placeholder="Contraseña" required>
-        </div>
-        <div class="input-form">
-            <label>Nueva Contraseña:</label>
-            <input type="password" id="nuevaContraseña" placeholder="Ingresar contraseña" required>
-        </div>
-        <div class="input-form">
-            <label>Nueva Contraseña:</label>
-            <input type="password" id="nuevaContraseña" placeholder="Ingresar nueva contraseña" required>
-        </div>
-        <input id="guardarCambios" type="submit" value="Guardar Cambios">
-    </form>
-</div> -->
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -101,50 +80,99 @@
 </script>
 
 <style>
-.dropdown{
+/* Contenedor principal */
+.dropdown {
     display: flex;
     flex-direction: column-reverse;
     position: fixed;
-    bottom: 0;
-    left: 0;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    bottom: 15px;
+    left: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    z-index: 1000;
 }
-.config{
+
+/* Botón Administrar */
+.config {
     cursor: pointer;
-    background: #ededed;
+    background: #ffffff;
     width: fit-content;
-    border-radius: 10px;
+    border-radius: 12px;
     margin: 5px;
-    padding: 3px 5px;
+    padding: 6px 14px;
     display: flex;
     align-items: center;
     text-decoration: none;
-    box-shadow: 0 0 7px #00000061;
-}
-.desp{
-    cursor: pointer;
-    background: #e3e3e3;
-    width: fit-content;
-    list-style: none;
-    border-radius: 10px;
-    padding: 5px 15px;
-    margin: 10px;
-    box-shadow: 0 0 7px #000;
-}
-.drop{
-    visibility: hidden;
-    position: absolute;
-}
-.desp li{
-    padding:5px 0;
-}
-.desp a{
-    text-decoration: none;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
 }
 
+.config:hover {
+    background: #fcfcfc;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+}
+
+/* Menú Desplegable */
+.desp {
+    cursor: pointer;
+    background: #ffffff;
+    width: 220px;
+    list-style: none;
+    border-radius: 12px;
+    padding: 8px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    border: 1px solid #eeeeee;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* Clase para ocultar */
+.drop {
+    display: none !important;
+}
+
+/* Estilo de los enlaces en la lista */
+.desp li {
+    padding: 2px 0;
+}
+
+.desp a {
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    color: #333333 !important;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+/* Hover en las opciones */
+.desp li:hover a {
+    background: #f0f4ff;
+    color: #265BFF !important;
+}
+
+/* Separador */
+.desp hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 5px 0;
+}
+
+/* Botón Salir */
+#salir a {
+    color: #d32f2f !important;
+}
+
+#salir:hover a {
+    background: #fff5f5;
+}
+
+/* Clase Activa (página actual) */
 .activo {
-    color: green !important;
+    background-color: #e8f5e9 !important;
+    color: #009007 !important;
     font-weight: bold;
 }
 </style>
-
