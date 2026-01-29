@@ -10,6 +10,7 @@
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/menu.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <script defer src="/js/modal_detalle.js"></script>
 
     <style>
         :root {
@@ -100,6 +101,8 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            cursor: pointer;
+            user-select: none;
         }
 
         .custom-card:hover {
@@ -153,6 +156,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            padding: 1.5rem;
         }
 
         .card-description {
@@ -161,6 +165,11 @@
             font-style: italic;
             margin-bottom: 20px;
             line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            line-clamp: 5;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .info-list {
@@ -271,7 +280,17 @@
             <div class="row g-4">
                 <% locales.forEach(local => { %>
                     <div class="col-12 col-sm-6 col-lg-4">
-                        <div class="custom-card" data-aos="fade-up" data-aos-duration="1000">
+                        <div class="custom-card"
+                            data-local-nombre="<%= local.nombre_local %>"
+                            data-local-imagen="<%= local.imagen %>"
+                            data-local-numero="<%= local.n_local %>"
+                            data-local-propietario="<%= local.propietario %>"
+                            data-local-horario="<%= local.horario %>"
+                            data-local-contacto="<%= local.contacto %>"
+                            data-local-descripcion="<%= local.descripcion || 'Sin descripción disponible' %>"
+                            data-local-facebook="<%= local.facebook || '' %>"
+                            data-local-tiktok="<%= local.tiktok || '' %>"
+                            data-aos="fade-up" data-aos-duration="1000">
                             <div class="img-container">
                                 <img src="/img/<%= local.imagen %>" 
                                      onerror="this.onerror=null; this.src='/img/por_defecto/externos_por_defecto.webp';"

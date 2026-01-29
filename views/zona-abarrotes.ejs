@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/menu.css">
+    <script defer src="/js/modal_detalle.js"></script>
 
     <style>
         :root {
@@ -99,6 +100,8 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            cursor: pointer;
+            user-select: none;
         }
 
         .custom-card:hover {
@@ -269,7 +272,17 @@
             <div class="row g-4">
                 <% locales.forEach(local => { %>
                     <div class="col-12 col-sm-6 col-lg-4">
-                        <div class="custom-card">
+                        <div class="custom-card"
+                            data-local-nombre="<%= local.nombre_local %>"
+                            data-local-imagen="<%= local.imagen %>"
+                            data-local-numero="<%= local.n_local %>"
+                            data-local-propietario="<%= local.propietario %>"
+                            data-local-horario="<%= local.horario %>"
+                            data-local-contacto="<%= local.contacto %>"
+                            data-local-descripcion="<%= local.descripcion || 'Sin descripción disponible' %>"
+                            data-local-facebook="<%= local.facebook || '' %>"
+                            data-local-tiktok="<%= local.tiktok || '' %>">
+                            
                             <div class="img-container">
                                 <img src="/img/<%= local.imagen %>" 
                                      onerror="this.onerror=null; this.src='/img/por_defecto/externos_por_defecto.webp';"
