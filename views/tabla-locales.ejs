@@ -1,116 +1,453 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
-  <link rel="shortcut icon" href="img/por_defectoicono.png" type="image/x-icon">
-  <title>Tabla de Locales - Base de Datos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/por_defectoicono.png" type="image/x-icon">
+    <title>Tabla de Locales - Base de Datos</title>
     <script src="/js/verificarSesion.js"></script>
-</head>
-
-<body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Avenir, Helvetica, Arial, sans-serif;
-            background-color: aliceblue;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            min-height: 100vh;
         }
 
         .modal-open {
             overflow: hidden;
         }
 
-        .cont {
-            padding: 3vw 0;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* Header con buscador */
+        .header-section {
+            background: #ffffff;
+            padding: 20px 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
         }
 
-        .bd_buscar,
-        .btn_buscar {
-            padding: 5px 10px;
-            border-radius: 3px;
+        .buscar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            max-width: 600px;
+        }
+
+        .bd_buscar {
+            flex: 1;
+            padding: 11px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.95em;
+            background-color: #ffffff;
+            color: #1f2937;
             cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .bd_buscar:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn_buscar {
+            padding: 11px 24px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn_buscar:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* Contenedor principal */
+        .cont {
+            padding: 0 30px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            color: #1a1a1a;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .page-title span {
+            color: #2563eb;
+        }
+
+        /* Tabla mejorada */
+        .contenedorTabla {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #e8e8e8;
         }
 
         .tabla {
-            width: 98%;
-            border-spacing: 0;
+            width: 100%;
             border-collapse: collapse;
+            table-layout: auto;
         }
 
-        th,
-        td {
-            text-align: center;
-            align-items: center;
-            padding: 10px;
-        }
-        tr{
-            border-bottom: 1px solid #00000024;
-            transition: .5s;
-        }
         thead {
-            background-color: #43baff16;
+            background-color: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 16px;
+            color: #1f2937;
+            font-size: 0.95em;
+            border-bottom: 1px solid #f3f4f6;
+            white-space: normal; 
+            word-wrap: break-word;
+            max-width: 200px;
+        }
+
+        /* Un toque especial para la descripción */
+        .descripcion-celda {
+            max-width: 250px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4em;
+            height: 2.8em;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+            cursor: pointer;
         }
 
         tbody tr:hover {
-            cursor: pointer;
-            background-color: #85858523;
+            background-color: #f9fafb;
         }
 
-        .tabla {
-            width: 100%;
+        tbody tr:last-child td {
+            border-bottom: none;
         }
+
+        td a {
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        td a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        /* Modal de edición mejorado */
         .actualizar {
             display: none;
             position: fixed;
             top: 0;
-            right: 0;
+            left: 0;
             width: 100%;
             height: 100vh;
-            background-color: #cfcecef5;
+            background-color: rgba(0, 0, 0, 0.5);
             align-items: center;
             justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(2px);
         }
 
-        .actualizar>div {
-            background-color: #fff;
-            padding: 15px 5px;
-            box-shadow: 0 0 5px #ffffff, 0 0 10px #000;
-            border-radius: 5px;
-            max-height: 100vh;
-            width: 300px;
+        .actualizar > div {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            width: 90%;
+            max-width: 500px;
+            overflow-y: auto;
+        }
+
+        .modal-header {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f3f4f6;
         }
 
-        .actualizar>div input {
-            margin-bottom: 5px;
-            width: 80%;
+        .modal-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #1a1a1a;
         }
 
-        .contenedorTabla {
-            width: 95%;
-            border-radius: 5px;
-            background-color: #fff;
+        .close {
+            font-size: 1.5em;
+            color: #6b7280;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #1f2937;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .actualizar label {
+            display: block;
+            color: #374151;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .actualizar input[type="text"],
+        .actualizar textarea {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+
+        .actualizar input:focus,
+        .actualizar textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .actualizar input:disabled {
+            background-color: #f3f4f6;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        #previewImagen {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border: 1px solid #e5e7eb;
+        }
+
+        #previewTexto {
+            color: #6b7280;
+            font-size: 0.9em;
+            margin: 10px 0;
+        }
+
+        #btnSeleccionarImagen {
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 10px 0;
+        }
+
+        #btnSeleccionarImagen:hover {
+            background-color: #111827;
+        }
+
+        /* Botones de acción */
+        .acciones {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .acciones button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .acciones button:first-child {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .acciones button:first-child:hover {
+            background-color: #dc2626;
+        }
+
+        .acciones button:last-child {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .acciones button:last-child:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* Galería de imágenes en SweetAlert */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .gallery-item {
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 6px;
             overflow: hidden;
-            overflow-x: auto;
-            box-shadow: 0 2px 5px #0000008d;
-            padding: 5px;
+            border: 2px solid transparent;
         }
-        .swal2-html-container{
-            max-height: 70vh;
+
+        .gallery-item:hover {
+            border-color: #3b82f6;
+            transform: scale(1.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-section {
+                padding: 15px 20px;
+            }
+
+            .cont {
+                padding: 0 20px 30px;
+            }
+
+            .buscar {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .bd_buscar,
+            .btn_buscar {
+                width: 100%;
+            }
+
+            .page-title {
+                font-size: 1.2em;
+            }
+
+            .contenedorTabla {
+                overflow-x: auto;
+            }
+
+            .tabla {
+                min-width: 800px;
+            }
+
+            th, td {
+                padding: 10px 12px;
+                font-size: 0.85em;
+            }
+
+            .actualizar > div {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+        /* Scrollbar personalizado */
+        .contenedorTabla::-webkit-scrollbar,
+        .actualizar > div::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .contenedorTabla::-webkit-scrollbar-track,
+        .actualizar > div::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .contenedorTabla::-webkit-scrollbar-thumb,
+        .actualizar > div::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .contenedorTabla::-webkit-scrollbar-thumb:hover,
+        .actualizar > div::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Select personalizado */
+        .bd_buscar {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
         }
     </style>
-    <!-- Aquí mostramos los datos en una tabla -->
-    <div class="cont">
+</head>
+
+<body>
+    <div class="header-section">
         <form class="buscar" action="/tabla-locales" method="get">
-            <select class="bd_buscar" name="buscar" id="">
-                <option value="" disabled selected>Elegir Tabla (Categoría)</option>
+            <select class="bd_buscar" name="buscar">
+                <option value="" disabled selected>Seleccionar categoría</option>
                 <option value="locales_abarrotes">Abarrotes</option>
                 <option value="locales_batidos">Batidos</option>
-                <option value="locales_cafeteria">Cafeterias</option>
-                <option value="locales_carnes">Carnes, Frigorificos</option>
+                <option value="locales_cafeteria">Cafeterías</option>
+                <option value="locales_carnes">Carnes, Frigoríficos</option>
                 <option value="locales_comedores">Comedor</option>
                 <option value="locales_externos">Locales Externos</option>
                 <option value="locales_frutas">Frutas</option>
@@ -122,12 +459,13 @@
             </select>
             <input class="btn_buscar" type="submit" value="Buscar">
         </form>
-        <h2 style="padding: 10px;">Tabla de Datos <span>
-                <%= nombreDescriptivo %>
-            </span></h2>
+    </div>
+
+    <div class="cont">
+        <h2 class="page-title">Tabla de Datos: <span><%= nombreDescriptivo %></span></h2>
+        
         <div class="contenedorTabla">
             <table class="tabla">
-                <br>
                 <thead>
                     <tr>
                         <th>N°</th>
@@ -138,117 +476,133 @@
                         <th>Horario</th>
                         <% if (mostrarCategoria) { %>
                             <th>Categoría</th>
-                            <% } %>
-                                <th>Descripción</th>
-                                <th>Facebook</th>
-                                <th>TikTok</th>
-                                <th>Imagen</th>
-                                <!-- <th>Acciones</th> -->
+                        <% } %>
+                        <th>Descripción</th>
+                        <th>Facebook</th>
+                        <th>TikTok</th>
+                        <th>Imagen</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% locales.forEach(local=> { %>
-                        <tr href="#editForm" id="local-<%= local.id_local %>" class="edit-btn azul" data-id="<%= local.id_local %>"
+                    <% locales.forEach(local => { %>
+                        <tr id="local-<%= local.id_local %>" class="edit-btn" 
+                            data-id="<%= local.id_local %>"
                             data-propietario="<%= local.propietario %>"
                             data-cedula="<%= local.cedula %>"
                             data-nombreLocal="<%= local.nombre_local %>"
-                            data-n_Local="<%= local.n_local %>" data-contacto="<%= local.contacto %>"
-                            data-horario="<%= local.horario %>" data-categoria="<%= local.categoria %>"
+                            data-n_Local="<%= local.n_local %>" 
+                            data-contacto="<%= local.contacto %>"
+                            data-horario="<%= local.horario %>" 
+                            data-categoria="<%= local.categoria %>"
                             data-descripcion="<%= local.descripcion %>" 
-                            data-facebook="<%= local.facebook %>" data-tiktok="<%= local.tiktok %>" data-imagen="<%= local.imagen %>">
-                            <td>
-                                <%= local.n_local %>
-                            </td>
-                            <td>
-                                <%= local.propietario %>
-                            </td>
-                            <td>
-                                <%= local.cedula %>
-                            </td>
-                            <td>
-                                <%= local.nombre_local %>
-                            </td>
-                            <td>
-                                <%= local.contacto %>
-                            </td>
-                            <td>
-                                <%= local.horario %>
-                            </td>
+                            data-facebook="<%= local.facebook %>" 
+                            data-tiktok="<%= local.tiktok %>" 
+                            data-imagen="<%= local.imagen %>">
+                            <td><%= local.n_local %></td>
+                            <td><%= local.propietario %></td>
+                            <td><%= local.cedula %></td>
+                            <td><%= local.nombre_local %></td>
+                            <td><%= local.contacto %></td>
+                            <td><%= local.horario %></td>
                             <% if (mostrarCategoria) { %>
-                                <td>
-                                    <%= local.categoria %>
-                                </td>
+                                <td><%= local.categoria %></td>
+                            <% } %>
+                            <td class="descripcion-celda"><%= local.descripcion %></td>
+                            <td>
+                                <% if (local.facebook) { %>
+                                    <a href="<%= local.facebook %>" target="_blank" onclick="event.stopPropagation()">Ver</a>
+                                <% } else { %>
+                                    -
                                 <% } %>
-                                    <td style="max-width: 300px; min-width: 200px;">
-                                        <%= local.descripcion %>
-                                    </td>
-                                    <td>
-                                        <a href="<%= local.facebook %>" target="_blank">
-                                            <%= local.facebook %>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="<%= local.tiktok %>" target="_blank">
-                                            <%= local.tiktok %>
-                                        </a>
-                                    </td>
-                                    <td>
-                                            <%= local.imagen %>
-                                    </td>
-                                    <!-- <td href="#editForm" class="acciones">
-                                        <button class="edit-btn azul" data-id="<%= local.id_local %>"
-                                            data-propietario="<%= local.propietario %>"
-                                            data-cedula="<%= local.cedula %>"
-                                            data-nombreLocal="<%= local.nombre_local %>"
-                                            data-n_Local="<%= local.n_local %>" data-contacto="<%= local.contacto %>"
-                                            data-horario="<%= local.horario %>" data-categoria="<%= local.categoria %>"
-                                            data-descripcion="<%= local.descripcion %>"
-                                            data-facebook="<%= local.facebook %>" data-imagen="<%= local.imagen %>">
-                                            Editar
-                                        </button>
-                                        <button class="delete-btn rojo"
-                                            data-id="<%= local.id_local %>">Eliminar</button>
-                                    </td> -->
-                            </tr>
-                        <% }) %>
+                            </td>
+                            <td>
+                                <% if (local.tiktok) { %>
+                                    <a href="<%= local.tiktok %>" target="_blank" onclick="event.stopPropagation()">Ver</a>
+                                <% } else { %>
+                                    -
+                                <% } %>
+                            </td>
+                            <td><%= local.imagen || 'Por defecto' %></td>
+                        </tr>
+                    <% }) %>
                 </tbody>
             </table>
         </div>
-    <%- include("./template/config.ejs")%>
 
-        <form class="actualizar" id="editForm" action="/actualizar-local" method="post" enctype="multipart/form-data">
+        <%- include("./template/config.ejs")%>
+
+        <!-- Modal de edición -->
+        <form class="actualizar" id="editForm" action="/actualizar-local" method="post">
             <div>
-                <div class="close" style="width: 90%; display: flex; justify-content: flex-end; cursor: pointer;">╳</div>
+                <div class="modal-header">
+                    <h3 class="modal-title">Editar Local</h3>
+                    <span class="close">×</span>
+                </div>
+
                 <input type="hidden" id="localId">
-                <label>Propietario:</label>
-                <input type="text" id="localPropietario" required maxlength="50">
-                <label>Cedula:</label>
-                <input type="text" id="localCedula" required maxlength="10">
-                <label>Nombre Local:</label>
-                <input type="text" id="localNombre" required maxlength="30">
-                <label>N° Local:</label>
-                <input type="text" id="localNumero" required maxlength="2">
-                <label>Contacto:</label>
-                <input type="text" id="localContacto" required maxlength="15" minlength="7">
-                <label>Horario:</label>
-                <input type="text" id="localHorario" required>
-                <label id="labelCategoria">Categoría</label>
-                <input type="text" id="localCategoria" maxlength="30">
-                <label>Descripción:</label>
-                <textarea class="textarea" id="localDescripcion" rows="4" cols="30" maxlength="200" required></textarea>
-                <!-- <input type="text" id="localDescripcion" required maxlength="200"> -->
-                <label>Facebook:</label>
-                <input type="text" id="localFacebook">
-                <label>Tik Tok:</label>
-                <input type="text" id="localTikTok">
-                <label>Imagen:</label>
-                <input type="text" id="localImagen" disabled>
-                <img id="previewImagen" src=""
-                    style="display: none; width: 100px; height: auto;">
-                <p id="previewTexto" style="display: none; color: gray;">Imagen por defecto</p>
-                <button type="button" id="btnSeleccionarImagen"
-                    style="padding: 3px 20px; font-size: calc(.4rem + .4em);">⟲ Cambiar imagen</button>
-                <br>
+                
+                <div class="form-group">
+                    <label>Propietario</label>
+                    <input type="text" id="localPropietario" required maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label>Cédula</label>
+                    <input type="text" id="localCedula" required maxlength="10">
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre del Local</label>
+                    <input type="text" id="localNombre" required maxlength="30">
+                </div>
+
+                <div class="form-group">
+                    <label>N° Local</label>
+                    <input type="text" id="localNumero" required maxlength="2">
+                </div>
+
+                <div class="form-group">
+                    <label>Contacto</label>
+                    <input type="text" id="localContacto" required maxlength="15" minlength="7">
+                </div>
+
+                <div class="form-group">
+                    <label>Horario</label>
+                    <input type="text" id="localHorario" required>
+                </div>
+
+                <div class="form-group" id="categoriaGroup">
+                    <label id="labelCategoria">Categoría</label>
+                    <input type="text" id="localCategoria" maxlength="30">
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea class="textarea" 
+                    id="localDescripcion" 
+                    rows="4" 
+                    maxlength="200" 
+                    required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Facebook</label>
+                    <input type="text" id="localFacebook">
+                </div>
+
+                <div class="form-group">
+                    <label>TikTok</label>
+                    <input type="text" id="localTikTok">
+                </div>
+
+                <div class="form-group">
+                    <label>Imagen</label>
+                    <input type="text" id="localImagen" disabled>
+                    <img id="previewImagen" src="" style="display: none;">
+                    <p id="previewTexto" style="display: none;">Imagen por defecto</p>
+                    <button type="button" id="btnSeleccionarImagen">Cambiar imagen</button>
+                </div>
+
                 <div class="acciones">
                     <button type="button">Eliminar</button>
                     <button type="submit">Guardar cambios</button>
@@ -257,104 +611,133 @@
         </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
-        // Añadir un manejador de eventos para eliminar el local usando AJAX
-    // Agregar evento al botón de eliminar en el formulario
-    document.querySelector('#editForm .acciones button:first-child').addEventListener('click', function () {
-        const localId = document.getElementById('localId').value;
-        if (localId) {
-            eliminarLocal(localId);
-        }
-    });
-
-    // Función para eliminar el local
-    function eliminarLocal(localId) {
-        Swal.fire({
-            title: "¿Estás seguro?",
-            text: "No podrás revertir esta acción.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Sí, eliminar",
-            cancelButtonText: "Cancelar"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`/borrar-local/${localId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById(`local-${localId}`)?.remove();
-                        cerrarModal();
-                        Swal.fire({
-                            title: "Eliminado",
-                            text: "El local ha sido eliminado correctamente.",
-                            icon: "success",
-                            confirmButtonColor: "#3085d6",
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "ERROR",
-                            text: data.message || "Hubo un error al eliminar el local.",
-                            icon: "error",
-                            confirmButtonColor: "#d33",
-                            confirmButtonText: "Aceptar"
-                        });
-                    }
-                })
-                .catch(error => {
-                    Swal.fire({
-                        title: "ERROR",
-                        text: "Ocurrió un problema con la solicitud.",
-                        icon: "error",
-                        confirmButtonColor: "#d33"
-                    });
-                });
+        // Función para eliminar el local
+        document.querySelector('#editForm .acciones button:first-child').addEventListener('click', function () {
+            const localId = document.getElementById('localId').value;
+            if (localId) {
+                eliminarLocal(localId);
             }
         });
-    }
+
+        function eliminarLocal(localId) {
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "No podrás revertir esta acción.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#ef4444",
+                cancelButtonColor: "#6b7280",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/borrar-local/${localId}`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById(`local-${localId}`)?.remove();
+                            cerrarModal();
+                            Swal.fire({
+                                title: "Eliminado",
+                                text: "El local ha sido eliminado correctamente.",
+                                icon: "success",
+                                confirmButtonColor: "#2563eb"
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error",
+                                text: data.message || "Hubo un error al eliminar el local.",
+                                icon: "error",
+                                confirmButtonColor: "#ef4444"
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: "Error",
+                            text: "Ocurrió un problema con la solicitud.",
+                            icon: "error",
+                            confirmButtonColor: "#ef4444"
+                        });
+                    });
+                }
+            });
+        }
+
+        // Selector de imágenes
         document.getElementById("btnSeleccionarImagen").addEventListener("click", function () {
             Swal.fire({
-                title: "Selecciona una Imagen",
+                title: "Seleccionar Imagen",
                 html: `
-            <div id="galeria" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-                <!-- Las imágenes se insertarán aquí dinámicamente -->
-            </div>
-        `,
+                    <div id="galeria" class="gallery-container">
+                        <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                            <div style="border: 3px solid #e5e7eb; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                            <p style="margin-top: 10px; color: #6b7280;">Cargando imágenes...</p>
+                        </div>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                `,
+                width: '800px',
                 showCancelButton: true,
                 cancelButtonText: "Cancelar",
-                showConfirmButton: false, // No necesitamos botón de confirmación
+                showConfirmButton: false,
                 didOpen: () => {
-                    // Cargar imágenes desde el servidor
-                    fetch("/listar-imagenes") // Ruta del backend que devuelve JSON con imágenes
+                    fetch("/listar-imagenes")
                         .then(response => response.json())
                         .then(data => {
                             const galeria = document.getElementById("galeria");
-                            galeria.innerHTML = ""; // Limpiar antes de insertar
+                            galeria.innerHTML = "";
+                            
+                            if (data.imagenes.length === 0) {
+                                galeria.innerHTML = '<p style="text-align: center; color: #6b7280;">No hay imágenes disponibles</p>';
+                                return;
+                            }
+                            
                             data.imagenes.forEach(img => {
+                                const imgContainer = document.createElement("div");
+                                imgContainer.className = "gallery-item";
+                                
                                 const imgElement = document.createElement("img");
                                 imgElement.src = `/img/${img}`;
-                                imgElement.style = "width: 100px; height: 100px; cursor: pointer; border-radius: 5px;";
-                                imgElement.addEventListener("click", () => {
-                                    document.getElementById("previewImagen").innerHTML = `<img src="/img/${img}" style="max-width: 150px;">`;
+                                imgElement.alt = img;
+                                
+                                imgContainer.appendChild(imgElement);
+                                imgContainer.addEventListener("click", () => {
                                     document.getElementById("localImagen").value = img;
-                                    Swal.close(); // Cerrar el modal
+                                    const preview = document.getElementById("previewImagen");
+                                    preview.src = `/img/${img}`;
+                                    preview.style.display = 'block';
+                                    document.getElementById("previewTexto").style.display = 'none';
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Imagen seleccionada',
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
                                 });
-                                galeria.appendChild(imgElement);
+                                
+                                galeria.appendChild(imgContainer);
                             });
                         })
-                        .catch(error => console.error("Error al cargar imágenes:", error));
+                        .catch(error => {
+                            console.error("Error al cargar imágenes:", error);
+                            document.getElementById("galeria").innerHTML = 
+                                '<p style="text-align: center; color: #ef4444;">Error al cargar las imágenes</p>';
+                        });
                 }
             });
         });
 
+        // Abrir modal al hacer clic en las filas
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', function () {
                 const localId = this.getAttribute('data-id');
@@ -367,10 +750,9 @@
                 const localCategoria = this.getAttribute('data-categoria') || '';
                 const localDescripcion = this.getAttribute('data-descripcion');
                 const localFacebook = this.getAttribute('data-facebook');
-                const localTikTok = this.getAttribute('data-TikTok');
+                const localTikTok = this.getAttribute('data-tiktok');
                 const localImagen = this.getAttribute('data-imagen');
 
-                // Asignar valores al formulario
                 document.getElementById('localId').value = localId;
                 document.getElementById('localPropietario').value = localPropietario;
                 document.getElementById('localCedula').value = localCedula;
@@ -379,116 +761,119 @@
                 document.getElementById('localContacto').value = localContacto;
                 document.getElementById('localHorario').value = localHorario;
                 document.getElementById('localCategoria').value = localCategoria;
-                const categoriaField = document.getElementById('localCategoria');
-                const categoriaLabel = document.getElementById('labelCategoria');
-
-                const valorCategoria = categoriaField.value.trim();
-
-                if (valorCategoria === '') {
-                    categoriaField.style.display = 'none';
-                    if (categoriaLabel) categoriaLabel.style.display = 'none'; // Oculta el label si existe
-                } else {
-                    categoriaField.style.display = 'block';
-                    if (categoriaLabel) categoriaLabel.style.display = 'block';
-                }
-
                 document.getElementById('localDescripcion').value = localDescripcion;
                 document.getElementById('localFacebook').value = localFacebook;
                 document.getElementById('localTikTok').value = localTikTok;
                 document.getElementById('localImagen').value = localImagen;
-                const previewImagen = document.getElementById('previewImagen');
-                const previewTexto = document.getElementById('previewTexto'); // Agrega un elemento para el texto
 
+                // Mostrar/ocultar campo de categoría
+                const categoriaGroup = document.getElementById('categoriaGroup');
+                if (localCategoria.trim() === '') {
+                    categoriaGroup.style.display = 'none';
+                } else {
+                    categoriaGroup.style.display = 'block';
+                }
+
+                // Preview de imagen
+                const previewImagen = document.getElementById('previewImagen');
+                const previewTexto = document.getElementById('previewTexto');
                 if (localImagen.trim() !== "") {
                     previewImagen.src = `/img/${localImagen}`;
                     previewImagen.style.display = 'block';
                     previewTexto.style.display = 'none';
                 } else {
                     previewImagen.style.display = 'none';
-                    previewTexto.textContent = "Imagen por defecto";
                     previewTexto.style.display = 'block';
                 }
 
-                // Mostrar el modal
-                document.getElementById('editForm').style.display = 'flex';
+                abrirModal();
             });
         });
 
-        // Función de validación
-        function validarFormulario() {
-            let valido = true;
-
-            // Validar que la cédula solo contenga números
-            if (!/^\d+$/.test(localCedula.value)) {
-                alert("La cédula solo debe contener números.");
-                valido = false;
-            }
-
-            // Validar que el número de local solo contenga números
-            if (!/^\d+$/.test(localNumero.value)) {
-                alert("El número de local solo debe contener números (Positivos).");
-                valido = false;
-            }
-            if (!/^\d{1,2}:\d{2}\s?(AM|PM)\s?-\s?\d{1,2}:\d{2}\s?(AM|PM)$/.test(localHorario.value)) {
-                alert("El horario debe tener el formato '9:00 AM - 6:00 PM'.");
-                valido = false;
-            }
-            // Validar que el contacto solo contenga números
-            if (!/^\d+$/.test(localContacto.value)) {
-                alert("El contacto solo debe contener números.");
-                valido = false;
-            }
-
-            // Validar que el nombre del propietario solo contenga letras y espacios
-            if (!/^[a-zA-Z\s]+$/.test(localPropietario.value)) {
-                alert("El nombre del propietario solo debe contener letras.");
-                valido = false;
-            }
-
-            // Validar que el nombre del local solo contenga letras y espacios
-            // const nombreLocal = document.getElementById('localNombre');
-            // if (!/^[a-zA-Z\s]+$/.test(nombreLocal.value)) {
-            //     alert("El nombre del local solo debe contener letras.");
-            //     valido = false;
-            // }
-
-            return valido;
-        }
-
-
-        //Cerrar modal
+        // Funciones de modal
         const editForm = document.getElementById('editForm');
         const closeButton = document.querySelector('.close');
 
         function abrirModal() {
             editForm.style.display = 'flex';
-            document.body.classList.add('modal-open'); // Bloquea el scroll
+            document.body.classList.add('modal-open');
         }
 
         function cerrarModal() {
             editForm.style.display = 'none';
-            document.body.classList.remove('modal-open'); // Restaura el scroll
+            document.body.classList.remove('modal-open');
         }
 
-        // Escuchar clic en los botones de edición
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                abrirModal();
-            });
-        });
+        closeButton.addEventListener('click', cerrarModal);
 
-        // Cerrar modal al hacer clic en el botón cancelar
-        closeButton.addEventListener('click', function () {
-            cerrarModal();
-        });
-
-        // Cerrar modal al hacer clic fuera del formulario
         window.addEventListener('click', function (event) {
             if (event.target === editForm) {
                 cerrarModal();
             }
         });
 
+        // Validación del formulario
+        function validarFormulario() {
+            const localCedula = document.getElementById('localCedula');
+            const localNumero = document.getElementById('localNumero');
+            const localHorario = document.getElementById('localHorario');
+            const localContacto = document.getElementById('localContacto');
+            const localPropietario = document.getElementById('localPropietario');
+
+            if (!/^\d+$/.test(localCedula.value)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de validación',
+                    text: 'La cédula solo debe contener números.',
+                    confirmButtonColor: '#ef4444'
+                });
+                return false;
+            }
+
+            if (!/^\d+$/.test(localNumero.value)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de validación',
+                    text: 'El número de local solo debe contener números positivos.',
+                    confirmButtonColor: '#ef4444'
+                });
+                return false;
+            }
+
+            if (!/^\d{1,2}:\d{2}\s?(AM|PM)\s?-\s?\d{1,2}:\d{2}\s?(AM|PM)$/i.test(localHorario.value)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de validación',
+                    text: 'El horario debe tener el formato "9:00 AM - 6:00 PM".',
+                    confirmButtonColor: '#ef4444'
+                });
+                return false;
+            }
+
+            if (!/^\d+$/.test(localContacto.value)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de validación',
+                    text: 'El contacto solo debe contener números.',
+                    confirmButtonColor: '#ef4444'
+                });
+                return false;
+            }
+
+            if (!/^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/.test(localPropietario.value)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de validación',
+                    text: 'El nombre del propietario solo debe contener letras.',
+                    confirmButtonColor: '#ef4444'
+                });
+                return false;
+            }
+
+            return true;
+        }
+
+        // Enviar formulario
         document.getElementById('editForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
@@ -496,7 +881,6 @@
                 return;
             }
 
-            const formData = new FormData();
             const id = document.getElementById('localId').value;
             const propietario = document.getElementById('localPropietario').value;
             const cedula = document.getElementById('localCedula').value;
@@ -507,32 +891,46 @@
             const categoria = document.getElementById('localCategoria')?.value || '';
             const descripcion = document.getElementById('localDescripcion').value;
             const facebook = document.getElementById('localFacebook').value;
+            const tiktok = document.getElementById('localTikTok').value;
             const imagen = document.getElementById('localImagen').value;
 
             fetch('/actualizar-local', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, propietario, cedula, nombre, numero, contacto, horario, categoria, descripcion, facebook, imagen })
+                body: JSON.stringify({ id, propietario, cedula, nombre, numero, contacto, horario, categoria, descripcion, facebook, tiktok, imagen })
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire("Éxito", data.message, "success").then(() => {
-                            location.reload(); // Recargar la página para ver los cambios
-                        });
-                    } else {
-                        Swal.fire("Error", data.message, "error");
-                    }
-                })
-                .catch(error => {
-                    Swal.fire("Error", "Hubo un problema con la solicitud.", "error");
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Éxito",
+                        text: data.message,
+                        confirmButtonColor: "#2563eb"
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: data.message,
+                        confirmButtonColor: "#ef4444"
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Hubo un problema con la solicitud.",
+                    confirmButtonColor: "#ef4444"
                 });
+            });
         });
-
     </script>
 
     <%- include("./template/footer.ejs")%>
-
 </body>
 
 </html>

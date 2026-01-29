@@ -161,3 +161,19 @@ li{
 .card_body ul{
   padding-left: 1rem;
 }
+
+.card-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hero-divider {
+  width: 60% !important;
+}
+
+.custom-card {
+    box-shadow: 0 5px 15px rgba(151, 151, 151, 0.508) !important;
+}
